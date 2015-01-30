@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="especies")
-@NamedQuery(name="Especy.findAll", query="SELECT e FROM Especy e")
-public class Especy implements Serializable {
+@NamedQuery(name="Especies.findAll", query="SELECT e FROM Especie e")
+public class Especie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -83,9 +83,9 @@ public class Especy implements Serializable {
 	//bi-directional many-to-one association to Nomespec
 	@ManyToOne
 	@JoinColumn(name="Nombre")
-	private Nomespec nomespec;
+	private NombreEspecie nomespec;
 
-	public Especy() {
+	public Especie() {
 	}
 
 	public Integer getIdentEsp() {
@@ -344,11 +344,11 @@ public class Especy implements Serializable {
 		this.tóxica = tóxica;
 	}
 
-	public Nomespec getNomespec() {
+	public NombreEspecie getNomespec() {
 		return this.nomespec;
 	}
 
-	public void setNomespec(Nomespec nomespec) {
+	public void setNomespec(NombreEspecie nomespec) {
 		this.nomespec = nomespec;
 	}
 

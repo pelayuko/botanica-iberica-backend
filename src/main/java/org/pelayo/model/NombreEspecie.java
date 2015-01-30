@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
-
 /**
  * The persistent class for the nomespec database table.
  * 
  */
 @Entity
-@NamedQuery(name="Nomespec.findAll", query="SELECT n FROM Nomespec n")
-public class Nomespec implements Serializable {
+@Table(name = "Nomespec")
+@NamedQuery(name = "NombreEspecie.findAll", query = "SELECT n FROM NombreEspecie n")
+public class NombreEspecie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -31,12 +31,12 @@ public class Nomespec implements Serializable {
 
 	private String restrSubesp;
 
-	//bi-directional many-to-one association to Especy
+	// bi-directional many-to-one association to Especy
 	@JsonIgnore
-	@OneToMany(mappedBy="nomespec")
-	private List<Especy> especies;
+	@OneToMany(mappedBy = "nomespec")
+	private List<Especie> especies;
 
-	public Nomespec() {
+	public NombreEspecie() {
 	}
 
 	public Integer getIdent() {
@@ -87,22 +87,22 @@ public class Nomespec implements Serializable {
 		this.restrSubesp = restrSubesp;
 	}
 
-	public List<Especy> getEspecies() {
+	public List<Especie> getEspecies() {
 		return this.especies;
 	}
 
-	public void setEspecies(List<Especy> especies) {
+	public void setEspecies(List<Especie> especies) {
 		this.especies = especies;
 	}
 
-	public Especy addEspecy(Especy especy) {
+	public Especie addEspecy(Especie especy) {
 		getEspecies().add(especy);
 		especy.setNomespec(this);
 
 		return especy;
 	}
 
-	public Especy removeEspecy(Especy especy) {
+	public Especie removeEspecy(Especie especy) {
 		getEspecies().remove(especy);
 		especy.setNomespec(null);
 

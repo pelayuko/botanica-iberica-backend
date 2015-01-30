@@ -10,9 +10,9 @@ import java.util.Date;
  * 
  */
 @Entity
-@NamedQuery(name="Localidentif.findAll", query="SELECT l FROM Localidentif l")
-
-public class Localidentif implements Serializable {
+@Table(name="Localidentif")
+@NamedQuery(name="Citas.findAll", query="SELECT l FROM Cita l")
+public class Cita implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -41,14 +41,14 @@ public class Localidentif implements Serializable {
 	//bi-directional many-to-one association to Especy
 	@ManyToOne
 	@JoinColumn(name="Especie")
-	private Especy especy;
+	private Especie especie;
 
 	//bi-directional many-to-one association to Lugare
 	@ManyToOne
 	@JoinColumn(name="Sitio")
-	private Lugare lugare;
+	private Lugares lugare;
 
-	public Localidentif() {
+	public Cita() {
 	}
 
 	public Integer getId() {
@@ -131,19 +131,19 @@ public class Localidentif implements Serializable {
 		this.utmy = utmy;
 	}
 
-	public Especy getEspecy() {
-		return this.especy;
+	public Especie getEspecy() {
+		return this.especie;
 	}
 
-	public void setEspecy(Especy especy) {
-		this.especy = especy;
+	public void setEspecy(Especie especy) {
+		this.especie = especy;
 	}
 
-	public Lugare getLugare() {
+	public Lugares getLugare() {
 		return this.lugare;
 	}
 
-	public void setLugare(Lugare lugare) {
+	public void setLugare(Lugares lugare) {
 		this.lugare = lugare;
 	}
 
