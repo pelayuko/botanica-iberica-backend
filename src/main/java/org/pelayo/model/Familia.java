@@ -18,32 +18,32 @@ public class Familia implements Serializable {
 	@Id
 	private String nombreFam;
 
-	private int flora;
+	private Integer  flora;
 
 	private String grupoFam;
 
-	private int hayClave;
+	private Integer  hayClave;
 
-	private int identEsp;
+	private Integer  identEsp;
 
-	private int idJaca;
+	private Integer  idJaca;
 
 	@Lob
 	private String info;
 
-	private byte marca1;
+	private Byte marca1;
 
-	private byte marca2;
+	private Byte marca2;
 
 	private String refFloraIberica;
 
-	private byte seleccionado;
+	private Byte seleccionado;
 
-	private int seleccionar;
+	private Integer  seleccionar;
 
 	//bi-directional many-to-one association to Género
 	@OneToMany(mappedBy="familiaBean")
-	private List<Genero> géneros;
+	private List<Genero> generos;
 
 	public Familia() {
 	}
@@ -56,11 +56,11 @@ public class Familia implements Serializable {
 		this.nombreFam = nombreFam;
 	}
 
-	public int getFlora() {
+	public Integer  getFlora() {
 		return this.flora;
 	}
 
-	public void setFlora(int flora) {
+	public void setFlora(Integer  flora) {
 		this.flora = flora;
 	}
 
@@ -72,27 +72,27 @@ public class Familia implements Serializable {
 		this.grupoFam = grupoFam;
 	}
 
-	public int getHayClave() {
+	public Integer  getHayClave() {
 		return this.hayClave;
 	}
 
-	public void setHayClave(int hayClave) {
+	public void setHayClave(Integer  hayClave) {
 		this.hayClave = hayClave;
 	}
 
-	public int getIdentEsp() {
+	public Integer  getIdentEsp() {
 		return this.identEsp;
 	}
 
-	public void setIdentEsp(int identEsp) {
+	public void setIdentEsp(Integer  identEsp) {
 		this.identEsp = identEsp;
 	}
 
-	public int getIdJaca() {
+	public Integer  getIdJaca() {
 		return this.idJaca;
 	}
 
-	public void setIdJaca(int idJaca) {
+	public void setIdJaca(Integer  idJaca) {
 		this.idJaca = idJaca;
 	}
 
@@ -104,19 +104,19 @@ public class Familia implements Serializable {
 		this.info = info;
 	}
 
-	public byte getMarca1() {
+	public Byte getMarca1() {
 		return this.marca1;
 	}
 
-	public void setMarca1(byte marca1) {
+	public void setMarca1(Byte marca1) {
 		this.marca1 = marca1;
 	}
 
-	public byte getMarca2() {
+	public Byte getMarca2() {
 		return this.marca2;
 	}
 
-	public void setMarca2(byte marca2) {
+	public void setMarca2(Byte marca2) {
 		this.marca2 = marca2;
 	}
 
@@ -128,39 +128,39 @@ public class Familia implements Serializable {
 		this.refFloraIberica = refFloraIberica;
 	}
 
-	public byte getSeleccionado() {
+	public Byte getSeleccionado() {
 		return this.seleccionado;
 	}
 
-	public void setSeleccionado(byte seleccionado) {
+	public void setSeleccionado(Byte seleccionado) {
 		this.seleccionado = seleccionado;
 	}
 
-	public int getSeleccionar() {
+	public Integer  getSeleccionar() {
 		return this.seleccionar;
 	}
 
-	public void setSeleccionar(int seleccionar) {
+	public void setSeleccionar(Integer  seleccionar) {
 		this.seleccionar = seleccionar;
 	}
 
-	public List<Genero> getGéneros() {
-		return this.géneros;
+	public List<Genero> getGeneros() {
+		return this.generos;
 	}
 
-	public void setGéneros(List<Genero> géneros) {
-		this.géneros = géneros;
+	public void setGeneros(List<Genero> géneros) {
+		this.generos = géneros;
 	}
 
 	public Genero addGénero(Genero género) {
-		getGéneros().add(género);
+		getGeneros().add(género);
 		género.setFamiliaBean(this);
 
 		return género;
 	}
 
 	public Genero removeGénero(Genero género) {
-		getGéneros().remove(género);
+		getGeneros().remove(género);
 		género.setFamiliaBean(null);
 
 		return género;

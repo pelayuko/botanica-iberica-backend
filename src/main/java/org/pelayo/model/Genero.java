@@ -1,7 +1,10 @@
 package org.pelayo.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -20,31 +23,32 @@ public class Genero implements Serializable {
 	@Lob
 	private String comentario;
 
-	private int idDilInicial;
+	private Integer  idDilInicial;
 
-	private int identGen;
+	private Integer  identGen;
 
-	private byte marca1;
+	private Byte marca1;
 
-	private byte marca2;
+	private Byte marca2;
 
-	private int NEspCult;
+	private Integer  NEspCult;
 
-	private int NEspMax;
+	private Integer  NEspMax;
 
-	private int NEspMin;
+	private Integer  NEspMin;
 
-	private int NEspProb;
+	private Integer  NEspProb;
 
 	private String nomComun;
 
 	private String refFloraIberica;
 
-	private byte seleccionado;
+	private Byte seleccionado;
 
 	//bi-directional many-to-one association to Familia
 	@ManyToOne
 	@JoinColumn(name="Familia")
+	@JsonIgnore
 	private Familia familiaBean;
 
 	public Genero() {
@@ -66,67 +70,67 @@ public class Genero implements Serializable {
 		this.comentario = comentario;
 	}
 
-	public int getIdDilInicial() {
+	public Integer  getIdDilInicial() {
 		return this.idDilInicial;
 	}
 
-	public void setIdDilInicial(int idDilInicial) {
+	public void setIdDilInicial(Integer  idDilInicial) {
 		this.idDilInicial = idDilInicial;
 	}
 
-	public int getIdentGen() {
+	public Integer  getIdentGen() {
 		return this.identGen;
 	}
 
-	public void setIdentGen(int identGen) {
+	public void setIdentGen(Integer  identGen) {
 		this.identGen = identGen;
 	}
 
-	public byte getMarca1() {
+	public Byte getMarca1() {
 		return this.marca1;
 	}
 
-	public void setMarca1(byte marca1) {
+	public void setMarca1(Byte marca1) {
 		this.marca1 = marca1;
 	}
 
-	public byte getMarca2() {
+	public Byte getMarca2() {
 		return this.marca2;
 	}
 
-	public void setMarca2(byte marca2) {
+	public void setMarca2(Byte marca2) {
 		this.marca2 = marca2;
 	}
 
-	public int getNEspCult() {
+	public Integer  getNEspCult() {
 		return this.NEspCult;
 	}
 
-	public void setNEspCult(int NEspCult) {
+	public void setNEspCult(Integer  NEspCult) {
 		this.NEspCult = NEspCult;
 	}
 
-	public int getNEspMax() {
+	public Integer  getNEspMax() {
 		return this.NEspMax;
 	}
 
-	public void setNEspMax(int NEspMax) {
+	public void setNEspMax(Integer  NEspMax) {
 		this.NEspMax = NEspMax;
 	}
 
-	public int getNEspMin() {
+	public Integer  getNEspMin() {
 		return this.NEspMin;
 	}
 
-	public void setNEspMin(int NEspMin) {
+	public void setNEspMin(Integer  NEspMin) {
 		this.NEspMin = NEspMin;
 	}
 
-	public int getNEspProb() {
+	public Integer  getNEspProb() {
 		return this.NEspProb;
 	}
 
-	public void setNEspProb(int NEspProb) {
+	public void setNEspProb(Integer  NEspProb) {
 		this.NEspProb = NEspProb;
 	}
 
@@ -146,11 +150,11 @@ public class Genero implements Serializable {
 		this.refFloraIberica = refFloraIberica;
 	}
 
-	public byte getSeleccionado() {
+	public Byte getSeleccionado() {
 		return this.seleccionado;
 	}
 
-	public void setSeleccionado(byte seleccionado) {
+	public void setSeleccionado(Byte seleccionado) {
 		this.seleccionado = seleccionado;
 	}
 

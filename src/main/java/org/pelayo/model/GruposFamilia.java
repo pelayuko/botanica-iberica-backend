@@ -21,19 +21,19 @@ public class GruposFamilia implements Serializable {
 	@Lob
 	private String comentario;
 
-	private int hayClave;
+	private Integer  hayClave;
 
-	private int identEsp;
+	private Integer  identEsp;
 
-	private byte marca1;
+	private Byte marca1;
 
-	private byte marca2;
+	private Byte marca2;
 
 	private String nombreClGrupo;
 
-	private byte seleccionado;
+	private Byte seleccionado;
 
-	private int seleccionar;
+	private Integer  seleccionar;
 
 	public GruposFamilia() {
 	}
@@ -54,35 +54,35 @@ public class GruposFamilia implements Serializable {
 		this.comentario = comentario;
 	}
 
-	public int getHayClave() {
+	public Integer  getHayClave() {
 		return this.hayClave;
 	}
 
-	public void setHayClave(int hayClave) {
+	public void setHayClave(Integer  hayClave) {
 		this.hayClave = hayClave;
 	}
 
-	public int getIdentEsp() {
+	public Integer  getIdentEsp() {
 		return this.identEsp;
 	}
 
-	public void setIdentEsp(int identEsp) {
+	public void setIdentEsp(Integer  identEsp) {
 		this.identEsp = identEsp;
 	}
 
-	public byte getMarca1() {
+	public Byte getMarca1() {
 		return this.marca1;
 	}
 
-	public void setMarca1(byte marca1) {
+	public void setMarca1(Byte marca1) {
 		this.marca1 = marca1;
 	}
 
-	public byte getMarca2() {
+	public Byte getMarca2() {
 		return this.marca2;
 	}
 
-	public void setMarca2(byte marca2) {
+	public void setMarca2(Byte marca2) {
 		this.marca2 = marca2;
 	}
 
@@ -94,19 +94,19 @@ public class GruposFamilia implements Serializable {
 		this.nombreClGrupo = nombreClGrupo;
 	}
 
-	public byte getSeleccionado() {
+	public Byte getSeleccionado() {
 		return this.seleccionado;
 	}
 
-	public void setSeleccionado(byte seleccionado) {
+	public void setSeleccionado(Byte seleccionado) {
 		this.seleccionado = seleccionado;
 	}
 
-	public int getSeleccionar() {
+	public Integer  getSeleccionar() {
 		return this.seleccionar;
 	}
 
-	public void setSeleccionar(int seleccionar) {
+	public void setSeleccionar(Integer  seleccionar) {
 		this.seleccionar = seleccionar;
 	}
 
