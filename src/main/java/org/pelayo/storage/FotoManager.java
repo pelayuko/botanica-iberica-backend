@@ -1,13 +1,14 @@
 package org.pelayo.storage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.pelayo.storage.config.FotoFloraConfiguration;
 import org.pelayo.storage.config.FotoPaisajesConfiguration;
 import org.pelayo.util.FileHelper;
+import org.pelayo.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,14 +34,15 @@ public class FotoManager {
 
 		File file = getRandomFile(path);
 
-		FileInputStream fis = null;
+		InputStream is = null;
 		try {
-			fis = new FileInputStream(file);
-			foto.setContent(IOUtils.toByteArray(fis));
+			// FIXME: fix this hardcoded content type!!
+			is = ImageUtil.createThumbnail(file, "image/jpeg");
+			foto.setContent(IOUtils.toByteArray(is));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
-			IOUtils.closeQuietly(fis);
+			IOUtils.closeQuietly(is);
 		}
 
 		foto.setName(file.getName());
