@@ -37,7 +37,8 @@ public class FotoManager {
 		InputStream is = null;
 		try {
 			// FIXME: fix this hardcoded content type!!
-			is = ImageUtil.createThumbnail(file, "image/jpeg");
+//			is = ImageUtil.createThumbnail(file, "image/jpeg");
+			is = ImageUtil.createRegularImage(file, "image/jpeg");
 			foto.setContent(IOUtils.toByteArray(is));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
