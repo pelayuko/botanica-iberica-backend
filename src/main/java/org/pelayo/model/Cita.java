@@ -6,11 +6,11 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the localidentif database table.
+ * The persistent class for the Citas database table.
  * 
  */
 @Entity
-@Table(name="Localidentif")
+@Table(name="Citas")
 @NamedQuery(name="Citas.findAll", query="SELECT l FROM Cita l")
 public class Cita implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class Cita implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
 
-	private String idZona;
+	private String sector;
 
 	private Byte invitada;
 
@@ -45,8 +45,8 @@ public class Cita implements Serializable {
 
 	//bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name="Sitio")
-	private Lugares lugare;
+	@JoinColumn(name="Zona")
+	private Zonas zona;
 
 	public Cita() {
 	}
@@ -91,12 +91,12 @@ public class Cita implements Serializable {
 		this.fecha = fecha;
 	}
 
-	public String getIdZona() {
-		return this.idZona;
+	public String getSector() {
+		return this.sector;
 	}
 
-	public void setIdZona(String idZona) {
-		this.idZona = idZona;
+	public void setSector(String sector) {
+		this.sector = sector;
 	}
 
 	public Byte getInvitada() {
@@ -131,20 +131,20 @@ public class Cita implements Serializable {
 		this.utmy = utmy;
 	}
 
-	public Especie getEspecy() {
+	public Especie getEspecie() {
 		return this.especie;
 	}
 
-	public void setEspecy(Especie especy) {
-		this.especie = especy;
+	public void setEspecie(Especie especie) {
+		this.especie = especie;
 	}
 
-	public Lugares getLugare() {
-		return this.lugare;
+	public Zonas getZona() {
+		return this.zona;
 	}
 
-	public void setLugare(Lugares lugare) {
-		this.lugare = lugare;
+	public void setZona(Zonas zona) {
+		this.zona = zona;
 	}
 
 }

@@ -13,15 +13,14 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 /**
- * The persistent class for the lugares database table.
+ * The persistent class for the zonas database table.
  * 
  */
 @Entity
-@Table(name="lugares")
-@NamedQuery(name="Lugares.findAll", query="SELECT l FROM Lugares l")
-public class Lugares implements Serializable {
+@Table(name = "zonas")
+@NamedQuery(name = "Zonas.findAll", query = "SELECT l FROM Zonas l")
+public class Zonas implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -36,12 +35,12 @@ public class Lugares implements Serializable {
 
 	private String nombre;
 
-	//bi-directional many-to-one association to Localidentif
+	// bi-directional many-to-one association to Localidentif
 	@JsonIgnore
-	@OneToMany(mappedBy="lugare", fetch=FetchType.EAGER)
-	private List<Cita> localidentifs;
+	@OneToMany(mappedBy = "zona", fetch = FetchType.EAGER)
+	private List<Cita> citas;
 
-	public Lugares() {
+	public Zonas() {
 	}
 
 	public Integer getId() {
@@ -84,26 +83,26 @@ public class Lugares implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Cita> getLocalidentifs() {
-		return this.localidentifs;
+	public List<Cita> getCitas() {
+		return this.citas;
 	}
 
-	public void setLocalidentifs(List<Cita> localidentifs) {
-		this.localidentifs = localidentifs;
+	public void setCitas(List<Cita> citas) {
+		this.citas = citas;
 	}
 
-	public Cita addLocalidentif(Cita localidentif) {
-		getLocalidentifs().add(localidentif);
-		localidentif.setLugare(this);
+	public Cita addCita(Cita cita) {
+		getCitas().add(cita);
+		cita.setZona(this);
 
-		return localidentif;
+		return cita;
 	}
 
-	public Cita removeLocalidentif(Cita localidentif) {
-		getLocalidentifs().remove(localidentif);
-		localidentif.setLugare(null);
+	public Cita removeLocalidentif(Cita cita) {
+		getCitas().remove(cita);
+		cita.setZona(null);
 
-		return localidentif;
+		return cita;
 	}
 
 }

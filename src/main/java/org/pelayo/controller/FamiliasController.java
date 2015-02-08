@@ -15,8 +15,13 @@ public class FamiliasController {
 	private FamiliasRepository familiasRepository;
 
 	@RequestMapping("/familias")
-	public List<Familia> citas() {
+	public List<Familia> familias() {
 		return familiasRepository.findAll();
+	}
+
+	@RequestMapping("/nombresFamilias")
+	public List<String> nombresFamilias() {
+		return familiasRepository.findAllNames();
 	}
 
 }

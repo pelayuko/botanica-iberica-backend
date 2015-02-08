@@ -11,6 +11,6 @@ public interface CitasRepository extends JpaRepository<Cita, Long> {
 
     List<Cita> findByLugar(String lugar);
     
-    @Query("select l from Cita l where l.lugare.nombre like '%:lugar%'")
-    List<Cita> findByLugar2(@Param("lugar") String lugar);
+    @Query("select c from Cita c where c.zona.nombre like '%:zona%'")
+    List<Cita> findByNombreZona(@Param("zona") String zona);
 }

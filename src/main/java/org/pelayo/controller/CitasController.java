@@ -30,7 +30,7 @@ public class CitasController {
 	@RequestMapping("/citaByLugar2")
 	public Iterable<Cita> getCitafByLugar2(
 			@RequestParam(value = "lugar", defaultValue = "") String lugar) {
-		return citasRepository.findByLugar2(lugar);
+		return citasRepository.findByNombreZona(lugar);
 	}
 
 }

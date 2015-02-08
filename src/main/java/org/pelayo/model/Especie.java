@@ -184,11 +184,11 @@ public class Especie implements Serializable {
 		this.frecSoria = frecSoria;
 	}
 
-	public String getGénero() {
+	public String getGenero() {
 		return this.género;
 	}
 
-	public void setGénero(String género) {
+	public void setGenero(String género) {
 		this.género = género;
 	}
 

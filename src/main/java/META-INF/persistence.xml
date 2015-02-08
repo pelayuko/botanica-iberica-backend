@@ -3,7 +3,7 @@
 	<persistence-unit name="botanica-backend">
 		<class>org.pelayo.model.Especie</class>
 		<class>org.pelayo.model.Cita</class>
-		<class>org.pelayo.model.Lugares</class>
+		<class>org.pelayo.model.Zonas</class>
 		<class>org.pelayo.model.NombreEspecie</class>
 		<class>org.pelayo.model.Familia</class>
 		<class>org.pelayo.model.GruposFamilia</class>
