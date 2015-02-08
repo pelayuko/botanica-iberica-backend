@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 /**
  * The persistent class for the vincsectoreszonas database table.
  * 
@@ -11,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "vincsectoreszonas")
 @NamedQuery(name = "VincSectoresZona.findAll", query = "SELECT v FROM VincSectoresZona v")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="idNexo")
 public class VincSectoresZona implements Serializable {
 	private static final long serialVersionUID = 1L;
 

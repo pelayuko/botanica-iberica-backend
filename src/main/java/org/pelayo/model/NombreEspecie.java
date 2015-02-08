@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "Nomespec")
 @NamedQuery(name = "NombreEspecie.findAll", query = "SELECT n FROM NombreEspecie n")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="ident")
 public class NombreEspecie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +35,7 @@ public class NombreEspecie implements Serializable {
 	private String restrSubesp;
 
 	// bi-directional many-to-one association to Especy
-	@JsonIgnore
+	// @JsonIgnore
 	@OneToMany(mappedBy = "nomespec")
 	private List<Especie> especies;
 

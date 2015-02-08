@@ -1,7 +1,11 @@
 package org.pelayo.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /**
@@ -11,6 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="sectores")
 @NamedQuery(name="Sector.findAll", query="SELECT s FROM Sector s")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="etiq")
 public class Sector implements Serializable {
 	private static final long serialVersionUID = 1L;
 

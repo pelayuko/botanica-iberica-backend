@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /**
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="géneros")
 @NamedQuery(name="Género.findAll", query="SELECT g FROM Genero g")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="nombreGen")
 public class Genero implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +51,7 @@ public class Genero implements Serializable {
 	//bi-directional many-to-one association to Familia
 	@ManyToOne
 	@JoinColumn(name="Familia")
-	@JsonIgnore
+	// @JsonIgnore
 	private Familia familiaBean;
 
 	public Genero() {

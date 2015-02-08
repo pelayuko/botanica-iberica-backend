@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class GzipFilter implements Filter {
 
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
+			ServletException {
 		// make sure we are dealing with HTTP
 		if (req instanceof HttpServletRequest) {
 			HttpServletRequest request = (HttpServletRequest) req;
@@ -26,8 +26,7 @@ public class GzipFilter implements Filter {
 			// signifies GZIP support
 			String ae = request.getHeader("accept-encoding");
 			if (ae != null && ae.indexOf("gzip") != -1) {
-				GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(
-						response);
+				GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(response);
 				chain.doFilter(req, wrappedResponse);
 				wrappedResponse.finish();
 				return;

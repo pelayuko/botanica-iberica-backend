@@ -42,8 +42,7 @@ public class BulkFotosCommand {
 
 	public static void main(String[] args) {
 
-		ApplicationContext ctx = SpringApplication.run(BulkFotosCommand.class,
-				args);
+		ApplicationContext ctx = SpringApplication.run(BulkFotosCommand.class, args);
 
 		System.out.println("Let's inspect the beans provided by Spring Boot:");
 
@@ -54,40 +53,31 @@ public class BulkFotosCommand {
 		}
 
 		(new BulkFotosCommand()).start(ctx);
+
+		System.exit(0);
 	}
 
 	public void start(ApplicationContext ctx) {
-		List<FotoLugar> fotosLugares = ctx
-				.getBean(FotosLugaresRepository.class).findAll();
-		String basePath = ctx.getBean(FotoPaisajesConfiguration.class)
-				.getPath() + "/";
+		List<FotoLugar> fotosLugares = ctx.getBean(FotosLugaresRepository.class).findAll();
+		String basePath = ctx.getBean(FotoPaisajesConfiguration.class).getPath() + "/";
 
 		for (FotoLugar fotoLugar : fotosLugares) {
-			List<VincSectoresZona> vincSectoresZonas = ctx.getBean(
-					VincSectoresZonaRepository.class).findByZona(
-					fotoLugar.getZonaBean());
+			String path = fotoLugar.getSector().getDenom() + "/" + fotoLugar.getFichero() + ".jpg";
 
-			for (VincSectoresZona vsz : vincSectoresZonas) {
-				String path = vsz.getSector().getDenom() + "/"
-						+ fotoLugar.getFichero() + ".jpg";
-
-				String fullPath = basePath + path;
-				File f = new File(fullPath);
-				if (f.exists()) {
-					System.out.println("EXISTE " + fullPath);
-					createFicheroFoto(ctx, fotoLugar, path);
-				} else {
-					System.out.println("NO EXISTE " + fullPath);
-				}
-
+			String fullPath = basePath + path;
+			File f = new File(fullPath);
+			if (f.exists()) {
+				System.out.println("EXISTE " + fullPath);
+				createFicheroFoto(ctx, fotoLugar, path);
+			} else {
+				System.out.println("NO EXISTE " + fullPath);
 			}
 
 		}
 
 	}
 
-	public void createFicheroFoto(ApplicationContext ctx, FotoLugar fotoLugar,
-			String path) {
+	public void createFicheroFoto(ApplicationContext ctx, FotoLugar fotoLugar, String path) {
 		FicherosFoto ficheroFoto = new FicherosFoto();
 		ficheroFoto.setId(UUID.randomUUID().toString());
 		ficheroFoto.setPath(path);

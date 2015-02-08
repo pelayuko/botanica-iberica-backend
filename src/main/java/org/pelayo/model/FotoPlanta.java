@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /**
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="fotosplantas")
 @NamedQuery(name="Fotosplanta.findAll", query="SELECT f FROM FotoPlanta f")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="idIdent")
 public class FotoPlanta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +31,7 @@ public class FotoPlanta implements Serializable {
 	private String fichero;
 
 	//bi-directional many-to-one association to Cita
-	@JsonIgnore
+	// @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="Cita")
 	private Cita citaBean;

@@ -4,18 +4,20 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Date;
-
 
 /**
  * The persistent class for the fotoslugares database table.
  * 
  */
 @Entity
-@Table(name="fotoslugares")
-@NamedQuery(name="Fotoslugare.findAll", query="SELECT f FROM FotoLugar f")
+@Table(name = "fotoslugares")
+@NamedQuery(name = "Fotoslugare.findAll", query = "SELECT f FROM FotoLugar f")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="idIdent")
 public class FotoLugar implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -34,18 +36,21 @@ public class FotoLugar implements Serializable {
 
 	private String fichero;
 
-	private String sector;
-
-	//bi-directional many-to-one association to Ficherosfoto
-	@JsonIgnore
+	// bi-directional many-to-one association to Zona
 	@ManyToOne
-	@JoinColumn(name="IdFichero")
+	@JoinColumn(name = "Sector")
+	private Sector sector;
+
+	// bi-directional many-to-one association to Ficherosfoto
+	// @JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "IdFichero")
 	private FicherosFoto ficherosfoto;
 
-	//bi-directional many-to-one association to Zona
-	@JsonIgnore
+	// bi-directional many-to-one association to Zona
+	// @JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="Zona")
+	@JoinColumn(name = "Zona")
 	private Zona zonaBean;
 
 	public FotoLugar() {
@@ -99,11 +104,11 @@ public class FotoLugar implements Serializable {
 		this.fichero = fichero;
 	}
 
-	public String getSector() {
+	public Sector getSector() {
 		return this.sector;
 	}
 
-	public void setSector(String sector) {
+	public void setSector(Sector sector) {
 		this.sector = sector;
 	}
 

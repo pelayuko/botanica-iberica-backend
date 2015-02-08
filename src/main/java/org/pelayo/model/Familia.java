@@ -1,7 +1,12 @@
 package org.pelayo.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.List;
 
 
@@ -12,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name="familias")
 @NamedQuery(name="Familia.findAll", query="SELECT f FROM Familia f")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="nombreFam")
 public class Familia implements Serializable {
 	private static final long serialVersionUID = 1L;
 

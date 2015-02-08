@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 /**
  * The persistent class for the gruposfam database table.
@@ -12,6 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="Gruposfam")
 @NamedQuery(name="GruposFamilia.findAll", query="SELECT g FROM GruposFamilia g")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="nombreGrupo")
 public class GruposFamilia implements Serializable {
 	private static final long serialVersionUID = 1L;
 

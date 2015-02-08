@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Entity
 @Table(name="zonas")
 @NamedQuery(name="Zona.findAll", query="SELECT z FROM Zona z")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Zona implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,12 +35,12 @@ public class Zona implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-one association to Cita
-	@JsonIgnore
+	// @JsonIgnore
 	@OneToMany(mappedBy="zona")
 	private List<Cita> citas;
 
 	//bi-directional many-to-one association to Fotoslugare
-	@JsonIgnore
+	// @JsonIgnore
 	@OneToMany(mappedBy="zonaBean")
 	private List<FotoLugar> fotoslugares;
 
