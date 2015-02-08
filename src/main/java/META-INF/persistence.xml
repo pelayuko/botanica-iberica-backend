@@ -3,10 +3,15 @@
 	<persistence-unit name="botanica-backend">
 		<class>org.pelayo.model.Especie</class>
 		<class>org.pelayo.model.Cita</class>
-		<class>org.pelayo.model.Zonas</class>
 		<class>org.pelayo.model.NombreEspecie</class>
 		<class>org.pelayo.model.Familia</class>
 		<class>org.pelayo.model.GruposFamilia</class>
 		<class>org.pelayo.model.Genero</class>
+		<class>org.pelayo.model.FicherosFoto</class>
+		<class>org.pelayo.model.FotoLugar</class>
+		<class>org.pelayo.model.FotoPlanta</class>
+		<class>org.pelayo.model.Zona</class>
+		<class>org.pelayo.model.Sector</class>
+		<class>org.pelayo.model.VincSectoresZona</class>
 	</persistence-unit>
 </persistence>

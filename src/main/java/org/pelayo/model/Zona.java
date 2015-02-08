@@ -1,26 +1,22 @@
 package org.pelayo.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
+
 
 /**
  * The persistent class for the zonas database table.
  * 
  */
 @Entity
-@Table(name = "zonas")
-@NamedQuery(name = "Zonas.findAll", query = "SELECT l FROM Zonas l")
-public class Zonas implements Serializable {
+@Table(name="zonas")
+@NamedQuery(name="Zona.findAll", query="SELECT z FROM Zona z")
+public class Zona implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -35,12 +31,17 @@ public class Zonas implements Serializable {
 
 	private String nombre;
 
-	// bi-directional many-to-one association to Localidentif
+	//bi-directional many-to-one association to Cita
 	@JsonIgnore
-	@OneToMany(mappedBy = "zona", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="zona")
 	private List<Cita> citas;
 
-	public Zonas() {
+	//bi-directional many-to-one association to Fotoslugare
+	@JsonIgnore
+	@OneToMany(mappedBy="zonaBean")
+	private List<FotoLugar> fotoslugares;
+
+	public Zona() {
 	}
 
 	public Integer getId() {
@@ -98,11 +99,33 @@ public class Zonas implements Serializable {
 		return cita;
 	}
 
-	public Cita removeLocalidentif(Cita cita) {
+	public Cita removeCita(Cita cita) {
 		getCitas().remove(cita);
 		cita.setZona(null);
 
 		return cita;
+	}
+
+	public List<FotoLugar> getFotoslugares() {
+		return this.fotoslugares;
+	}
+
+	public void setFotoslugares(List<FotoLugar> fotoslugares) {
+		this.fotoslugares = fotoslugares;
+	}
+
+	public FotoLugar addFotoslugare(FotoLugar fotoslugare) {
+		getFotoslugares().add(fotoslugare);
+		fotoslugare.setZonaBean(this);
+
+		return fotoslugare;
+	}
+
+	public FotoLugar removeFotoslugare(FotoLugar fotoslugare) {
+		getFotoslugares().remove(fotoslugare);
+		fotoslugare.setZonaBean(null);
+
+		return fotoslugare;
 	}
 
 }
