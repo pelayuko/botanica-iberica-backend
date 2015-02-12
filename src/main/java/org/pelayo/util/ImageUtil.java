@@ -2,10 +2,7 @@ package org.pelayo.util;
 
 import static org.imgscalr.Scalr.OP_ANTIALIAS;
 import static org.imgscalr.Scalr.OP_BRIGHTER;
-import static org.imgscalr.Scalr.pad;
 import static org.imgscalr.Scalr.resize;
-
-import org.imgscalr.Scalr.Method;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -17,6 +14,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
+import org.imgscalr.Scalr.Method;
 
 public class ImageUtil {
 

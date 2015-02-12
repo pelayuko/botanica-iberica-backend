@@ -41,7 +41,7 @@ public class Zona implements Serializable {
 
 	//bi-directional many-to-one association to Fotoslugare
 	// @JsonIgnore
-	@OneToMany(mappedBy="zonaBean")
+	@OneToMany(mappedBy="zona")
 	private List<FotoLugar> fotoslugares;
 
 	public Zona() {
@@ -119,14 +119,14 @@ public class Zona implements Serializable {
 
 	public FotoLugar addFotoslugare(FotoLugar fotoslugare) {
 		getFotoslugares().add(fotoslugare);
-		fotoslugare.setZonaBean(this);
+		fotoslugare.setZona(this);
 
 		return fotoslugare;
 	}
 
 	public FotoLugar removeFotoslugare(FotoLugar fotoslugare) {
 		getFotoslugares().remove(fotoslugare);
-		fotoslugare.setZonaBean(null);
+		fotoslugare.setZona(null);
 
 		return fotoslugare;
 	}

@@ -48,7 +48,7 @@ public class Familia implements Serializable {
 	private Integer  seleccionar;
 
 	//bi-directional many-to-one association to Género
-	@OneToMany(mappedBy="familiaBean")
+	@OneToMany(mappedBy="familia")
 	private List<Genero> generos;
 
 	public Familia() {
@@ -160,14 +160,14 @@ public class Familia implements Serializable {
 
 	public Genero addGénero(Genero género) {
 		getGeneros().add(género);
-		género.setFamiliaBean(this);
+		género.setFamilia(this);
 
 		return género;
 	}
 
 	public Genero removeGénero(Genero género) {
 		getGeneros().remove(género);
-		género.setFamiliaBean(null);
+		género.setFamilia(null);
 
 		return género;
 	}

@@ -1,14 +1,20 @@
 package org.pelayo.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import java.util.Date;
 
 /**
  * The persistent class for the fotoslugares database table.
@@ -17,8 +23,8 @@ import java.util.Date;
 @Entity
 @Table(name = "fotoslugares")
 @NamedQuery(name = "Fotoslugare.findAll", query = "SELECT f FROM FotoLugar f")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="idIdent")
-public class FotoLugar implements Serializable {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idIdent")
+public class FotoLugar implements SectorProvider, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -51,7 +57,7 @@ public class FotoLugar implements Serializable {
 	// @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "Zona")
-	private Zona zonaBean;
+	private Zona zona;
 
 	public FotoLugar() {
 	}
@@ -120,12 +126,17 @@ public class FotoLugar implements Serializable {
 		this.ficherosfoto = ficherosfoto;
 	}
 
-	public Zona getZonaBean() {
-		return this.zonaBean;
+	public Zona getZona() {
+		return this.zona;
 	}
 
-	public void setZonaBean(Zona zonaBean) {
-		this.zonaBean = zonaBean;
+	public void setZona(Zona zona) {
+		this.zona = zona;
+	}
+
+	@Override
+	public String getSectorName() {
+		return sector.getDenom();
 	}
 
 }

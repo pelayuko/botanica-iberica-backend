@@ -52,7 +52,7 @@ public class Genero implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="Familia")
 	// @JsonIgnore
-	private Familia familiaBean;
+	private Familia familia;
 
 	public Genero() {
 	}
@@ -161,12 +161,12 @@ public class Genero implements Serializable {
 		this.seleccionado = seleccionado;
 	}
 
-	public Familia getFamiliaBean() {
-		return this.familiaBean;
+	public Familia getFamilia() {
+		return this.familia;
 	}
 
-	public void setFamiliaBean(Familia familiaBean) {
-		this.familiaBean = familiaBean;
+	public void setFamilia(Familia familia) {
+		this.familia = familia;
 	}
 
 }

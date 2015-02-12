@@ -18,15 +18,14 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-
 /**
  * The persistent class for the citas database table.
  * 
  */
 @Entity
-@Table(name="citas")
-@NamedQuery(name="Cita.findAll", query="SELECT c FROM Cita c")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@Table(name = "citas")
+@NamedQuery(name = "Cita.findAll", query = "SELECT c FROM Cita c")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Cita implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -49,19 +48,22 @@ public class Cita implements Serializable {
 
 	private String lugar;
 
-	private String sector;
+	// bi-directional many-to-one association to Zona
+	@ManyToOne
+	@JoinColumn(name = "Sector")
+	private Sector sector;
 
 	private Integer utmx;
 
 	private Integer utmy;
 
-	//bi-directional many-to-one association to Zona
+	// bi-directional many-to-one association to Zona
 	@ManyToOne
-	@JoinColumn(name="Zona")
+	@JoinColumn(name = "Zona")
 	private Zona zona;
 
-	//bi-directional many-to-one association to Fotosplanta
-	@OneToMany(mappedBy="citaBean")
+	// bi-directional many-to-one association to Fotosplanta
+	@OneToMany(mappedBy = "cita")
 	private List<FotoPlanta> fotosplantas;
 
 	public Cita() {
@@ -131,11 +133,11 @@ public class Cita implements Serializable {
 		this.lugar = lugar;
 	}
 
-	public String getSector() {
+	public Sector getSector() {
 		return this.sector;
 	}
 
-	public void setSector(String sector) {
+	public void setSector(Sector sector) {
 		this.sector = sector;
 	}
 
@@ -173,14 +175,14 @@ public class Cita implements Serializable {
 
 	public FotoPlanta addFotosplanta(FotoPlanta fotosplanta) {
 		getFotosplantas().add(fotosplanta);
-		fotosplanta.setCitaBean(this);
+		fotosplanta.setCita(this);
 
 		return fotosplanta;
 	}
 
 	public FotoPlanta removeFotosplanta(FotoPlanta fotosplanta) {
 		getFotosplantas().remove(fotosplanta);
-		fotosplanta.setCitaBean(null);
+		fotosplanta.setCita(null);
 
 		return fotosplanta;
 	}

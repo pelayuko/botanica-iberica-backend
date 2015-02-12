@@ -1,44 +1,33 @@
 package org.pelayo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import org.pelayo.dao.FicherosFotoRepository;
 import org.pelayo.dao.FotosLugaresRepository;
-import org.pelayo.dao.VincSectoresZonaRepository;
+import org.pelayo.dao.FotosPlantasRepository;
 import org.pelayo.model.FicherosFoto;
-import org.pelayo.model.FotoLugar;
-import org.pelayo.model.VincSectoresZona;
+import org.pelayo.model.SectorProvider;
 import org.pelayo.storage.config.FotoFloraConfiguration;
 import org.pelayo.storage.config.FotoPaisajesConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
 public class BulkFotosCommand {
 
-	@Autowired
-	FotosLugaresRepository fotosLugaresRepository;
-
-	@Autowired
-	FicherosFotoRepository ficherosFotoRepository;
-
-	@Autowired
-	VincSectoresZonaRepository vincSectoresZonaRepository;
-
-	@Autowired
-	private FotoFloraConfiguration fotoFloraConfiguration;
-
-	@Autowired
-	private FotoPaisajesConfiguration fotoPaisajesConfiguration;
+	static Integer count = 0;
+	static Integer countNoExist = 0;
+	static List<String> listMissingPath = new ArrayList<String>();
 
 	public static void main(String[] args) {
 
@@ -52,39 +41,58 @@ public class BulkFotosCommand {
 			System.out.println(beanName);
 		}
 
-		(new BulkFotosCommand()).start(ctx);
+		try {
+			BulkFotosCommand command = new BulkFotosCommand();
 
-		System.exit(0);
-	}
+			command.createFotos(ctx, ctx.getBean(FotosLugaresRepository.class),
+					ctx.getBean(FotoPaisajesConfiguration.class).getPath());
+			command.createFotos(ctx, ctx.getBean(FotosPlantasRepository.class),
+					ctx.getBean(FotoFloraConfiguration.class).getPath());
 
-	public void start(ApplicationContext ctx) {
-		List<FotoLugar> fotosLugares = ctx.getBean(FotosLugaresRepository.class).findAll();
-		String basePath = ctx.getBean(FotoPaisajesConfiguration.class).getPath() + "/";
-
-		for (FotoLugar fotoLugar : fotosLugares) {
-			String path = fotoLugar.getSector().getDenom() + "/" + fotoLugar.getFichero() + ".jpg";
-
-			String fullPath = basePath + path;
-			File f = new File(fullPath);
-			if (f.exists()) {
-				System.out.println("EXISTE " + fullPath);
-				createFicheroFoto(ctx, fotoLugar, path);
-			} else {
-				System.out.println("NO EXISTE " + fullPath);
+			System.out.println("NO EXISTEN " + countNoExist);
+			for (String p : listMissingPath) {
+				System.out.println("\t " + p);
 			}
 
+			System.exit(0);
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			System.exit(-1);
 		}
 
 	}
 
-	public void createFicheroFoto(ApplicationContext ctx, FotoLugar fotoLugar, String path) {
+	public <T extends SectorProvider> void createFotos(ApplicationContext ctx, JpaRepository<T, Long> repo,
+			String basePath) {
+		List<T> fotosConSector = repo.findAll();
+
+		for (T sectorProvider : fotosConSector) {
+			String path = sectorProvider.getSectorName() + "/" + sectorProvider.getFichero() + ".jpg";
+
+			String fullPath = basePath + "/" + path;
+			File f = new File(fullPath);
+			if (!f.exists()) {
+				countNoExist++;
+				listMissingPath.add(fullPath);
+				System.out.println("NO EXISTE " + fullPath);
+			} else {
+				System.out.println(++count + " EXISTE " + fullPath);
+				createFicheroFoto(ctx, repo, sectorProvider, path);
+			}
+		}
+
+	}
+
+	public <T extends SectorProvider> void createFicheroFoto(ApplicationContext ctx, JpaRepository<T, Long> repo,
+			T sectorProvider, String path) {
 		FicherosFoto ficheroFoto = new FicherosFoto();
 		ficheroFoto.setId(UUID.randomUUID().toString());
 		ficheroFoto.setPath(path);
 		// ficheroFoto.addFotoslugare(fotoLugar);
 		ctx.getBean(FicherosFotoRepository.class).save(ficheroFoto);
 
-		fotoLugar.setFicherosfoto(ficheroFoto);
-		ctx.getBean(FotosLugaresRepository.class).save(fotoLugar);
+		sectorProvider.setFicherosfoto(ficheroFoto);
+		repo.save(sectorProvider);
 	}
+
 }
