@@ -208,7 +208,6 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 		try {
 			upPhoto.getFlickr().getPhotosInterface()
 					.setTags(ficheroFoto.getFlickrId(), model.getTags().toArray(new String[model.getTags().size()]));
-			log.info(sequence.getAndIncrement() + " Tags set by " + Thread.currentThread().getId());
 		} catch (FlickrException e) {
 			log.info(sequenceErrors.incrementAndGet() + " Error setting tags: " + model.getFileName());
 		}

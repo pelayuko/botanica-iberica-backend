@@ -1,21 +1,12 @@
 package org.pelayo.dev.flickr.commands;
 
-// import java.io.BufferedInputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
-// import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-// import java.io.ByteArrayOutputStream;
-//import java.io.File;
-// import java.io.FileInputStream;
-// import java.io.IOException;
-// import java.io.InputStream;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.pelayo.dev.flickr.commands.base.AbstractAuthorizedBaseCommand;
@@ -27,26 +18,16 @@ import org.springframework.util.StringUtils;
 import com.flickr4java.flickr.Flickr;
 import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.RequestContext;
-// import com.flickr4java.flickr.Transport;
 import com.flickr4java.flickr.auth.Auth;
 import com.flickr4java.flickr.auth.Permission;
 import com.flickr4java.flickr.photos.GeoData;
 import com.flickr4java.flickr.photos.Photo;
-import com.flickr4java.flickr.photos.PhotoList;
-import com.flickr4java.flickr.photos.PhotosInterface;
-// import com.flickr4java.flickr.photos.Size;
 import com.flickr4java.flickr.photosets.Photoset;
 import com.flickr4java.flickr.photosets.Photosets;
 import com.flickr4java.flickr.photosets.PhotosetsInterface;
-// import com.flickr4java.flickr.util.IOUtilities;
 import com.flickr4java.flickr.prefs.PrefsInterface;
-// import com.flickr4java.flickr.photos.PhotosInterface;
 import com.flickr4java.flickr.uploader.UploadMetaData;
 import com.flickr4java.flickr.uploader.Uploader;
-// import java.io.FileOutputStream;
-// import java.util.Map;
-
-// import com.flickr4java.flickr.tags.Tag;
 
 /**
  * A simple program to upload photos to a set. It checks for files already
@@ -73,9 +54,7 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 
 	private int privacy = -1;
 
-	HashMap<String, Photoset> allSetsMap = new HashMap<String, Photoset>();
-
-	HashMap<String, ArrayList<String>> setNameToId = new HashMap<String, ArrayList<String>>();
+	private HashMap<String, String> allSetsMap = new HashMap<String, String>();
 
 	public static final SimpleDateFormat smp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss a");
 
@@ -85,9 +64,11 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 		if (!canUpload()) {
 			throw new RuntimeException("Cannot upload!");
 		}
+
+		fetchPhotosetsInfo();
 	}
 
-	public int getPrivacy() throws Exception {
+	private int getPrivacy() throws Exception {
 
 		PrefsInterface prefi = flickr.getPrefsInterface();
 		privacy = prefi.getPrivacy();
@@ -189,21 +170,7 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 		// InputStream in = null;
 		Uploader uploader = flickr.getUploader();
 
-		// ByteArrayOutputStream out = null;
 		try {
-			// in = new FileInputStream(imageFile);
-			// out = new ByteArrayOutputStream();
-
-			// int b = -1;
-			/**
-			 * while ((b = in.read()) != -1) { out.write((byte) b); }
-			 **/
-
-			/**
-			 * byte[] buf = new byte[1024]; while ((b = in.read(buf)) != -1) {
-			 * // fos.write(read); out.write(buf, 0, b); }
-			 **/
-
 			metaData.setFilename(basefilename);
 			// check correct handling of escaped value
 
@@ -218,65 +185,32 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 		return (photoId);
 	}
 
-	// FIXME: review this method
-	public void getPhotosetsInfo() {
+	private void fetchPhotosetsInfo() {
 
 		PhotosetsInterface pi = flickr.getPhotosetsInterface();
 		try {
-			int setsPage = 1;
+			int page = 1;
 			while (true) {
-				Photosets photosets = pi.getList(userId, 500, setsPage, null);
+				Photosets photosets = pi.getList(userId, 500, page, null);
 				Collection<Photoset> setsColl = photosets.getPhotosets();
 				Iterator<Photoset> setsIter = setsColl.iterator();
 				while (setsIter.hasNext()) {
 					Photoset set = setsIter.next();
-					allSetsMap.put(set.getId(), set);
-
-					// 2 or more sets can in theory have the same name. !!!
-					ArrayList<String> setIdarr = setNameToId.get(set.getTitle());
-					if (setIdarr == null) {
-						setIdarr = new ArrayList<String>();
-						setIdarr.add(new String(set.getId()));
-						setNameToId.put(set.getTitle(), setIdarr);
-					} else {
-						setIdarr.add(new String(set.getId()));
-					}
+					allSetsMap.put(set.getTitle(), set.getId());
 				}
 
 				if (setsColl.size() < 500) {
 					break;
 				}
-				setsPage++;
+				page++;
 			}
-			logger.debug(" Sets retrieved: " + allSetsMap.size());
-			// all_sets_retrieved = true;
-			// Print dups if any.
-
-			Set<String> keys = setNameToId.keySet();
-			Iterator<String> iter = keys.iterator();
-			while (iter.hasNext()) {
-				String name = iter.next();
-				ArrayList<String> setIdarr = setNameToId.get(name);
-				if (setIdarr != null && setIdarr.size() > 1) {
-					System.out.println("There is more than 1 set with this name : " + setNameToId.get(name));
-					for (int j = 0; j < setIdarr.size(); j++) {
-						System.out.println("           id: " + setIdarr.get(j));
-					}
-				}
-			}
-
+			logger.info(" Sets retrieved: " + allSetsMap.size());
 		} catch (FlickrException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private String setid = null;
-
 	private String basefilename = null;
-
-	private final PhotoList<Photo> photos = new PhotoList<Photo>();
-
-	private final HashMap<String, Photo> filePhotos = new HashMap<String, Photo>();
 
 	@Override
 	public Photo execute(PhotoUploadModel model) throws Exception {
@@ -292,51 +226,43 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 		else
 			basefilename = filename;
 
-		boolean fileUploaded = checkIfLoaded(filename);
-
-		if (!fileUploaded) {
-			if (!FlickrHelper.isValidSuffix(basefilename)) {
-				System.out.println(" File: " + basefilename
-						+ " is not a supported filetype for flickr (invalid suffix)");
-				return null;
-			}
-
-			File f = new File(filename);
-			if (!f.exists() || !f.canRead()) {
-				System.out.println(" File: " + filename + " cannot be processed, does not exist or is unreadable.");
-				return null;
-			}
-			logger.debug("Calling uploadfile for filename : " + filename);
-			long initTime = System.currentTimeMillis();
-
-			// logger.info("Upload of " + filename + " started at: " +
-			// smp.format(new Date()) + "\n");
-
-			photoid = uploadfile(model);
-			// Add to Set. Create set if it does not exist.
-			if (photoid != null) {
-				addPhotoToSet(photoid, model.getAlbumName());
-			}
-			// logger.info("Upload of " + filename + " finished at: " +
-			// smp.format(new Date()) + "\n");
-			logger.info("Upload took " + (System.currentTimeMillis() - initTime) + "millis\n");
-
-			if (model.getGeoData() != null) {
-				GeoData geoData = new GeoData();
-				{
-					geoData.setLatitude(model.getGeoData().getLat());
-					geoData.setLongitude(model.getGeoData().getLng());
-					geoData.setAccuracy(Flickr.ACCURACY_STREET);
-				}
-
-				flickr.getGeoInterface().setLocation(photoid, geoData);
-			}
-
-			return flickr.getPhotosInterface().getPhoto(photoid);
-		} else {
-			logger.info(" File: " + filename + " has already been loaded on " + getUploadedTime(filename));
+		if (!FlickrHelper.isValidSuffix(basefilename)) {
+			System.out.println(" File: " + basefilename + " is not a supported filetype for flickr (invalid suffix)");
 			return null;
 		}
+
+		File f = new File(filename);
+		if (!f.exists() || !f.canRead()) {
+			System.out.println(" File: " + filename + " cannot be processed, does not exist or is unreadable.");
+			return null;
+		}
+		logger.debug("Calling uploadfile for filename : " + filename);
+		long initTime = System.currentTimeMillis();
+
+		// logger.info("Upload of " + filename + " started at: " +
+		// smp.format(new Date()) + "\n");
+
+		photoid = uploadfile(model);
+		// Add to Set. Create set if it does not exist.
+		if (photoid != null) {
+			addPhotoToSet(photoid, model.getAlbumName());
+		}
+		// logger.info("Upload of " + filename + " finished at: " +
+		// smp.format(new Date()) + "\n");
+		logger.info("Upload took " + (System.currentTimeMillis() - initTime) + "millis\n");
+
+		if (model.getGeoData() != null) {
+			GeoData geoData = new GeoData();
+			{
+				geoData.setLatitude(model.getGeoData().getLat());
+				geoData.setLongitude(model.getGeoData().getLng());
+				geoData.setAccuracy(Flickr.ACCURACY_STREET);
+			}
+
+			flickr.getGeoInterface().setLocation(photoid, geoData);
+		}
+
+		return flickr.getPhotosInterface().getPhoto(photoid);
 	}
 
 	private boolean canUpload() {
@@ -356,135 +282,14 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 		}
 	}
 
-	/**
-	 * The assumption here is that for a given set only unique file-names will
-	 * be loaded and the title field can be used. Later change to use the tags
-	 * field ( OrigFileName) and strip off the suffix.
-	 * 
-	 * @param filename
-	 * @return
-	 */
-	private boolean checkIfLoaded(String filename) {
-
-		String title;
-		if (basefilename.lastIndexOf('.') > 0)
-			title = basefilename.substring(0, basefilename.lastIndexOf('.'));
-		else
-			return false;
-
-		if (filePhotos.containsKey(title))
-			return true;
-
-		return false;
-	}
-
-	private String getUploadedTime(String filename) {
-
-		String title = "";
-		if (basefilename.lastIndexOf('.') > 0)
-			title = basefilename.substring(0, basefilename.lastIndexOf('.'));
-
-		if (filePhotos.containsKey(title)) {
-			Photo p = filePhotos.get(title);
-			if (p.getDatePosted() != null) {
-				return (smp.format(p.getDatePosted()));
-			}
-		}
-
-		return "";
-	}
-
-	public void getSetPhotos(String setName) throws FlickrException {
-		// Check if this is an existing set. If it is get all the photo list to
-		// avoid reloading already
-		// loaded photos.
-		ArrayList<String> setIdarr;
-		setIdarr = setNameToId.get(setName);
-		if (setIdarr != null) {
-			setid = setIdarr.get(0);
-			PhotosetsInterface pi = flickr.getPhotosetsInterface();
-
-			Set<String> extras = new HashSet<String>();
-			/**
-			 * A comma-delimited list of extra information to fetch for each
-			 * returned record. Currently supported fields are: license,
-			 * date_upload, date_taken, owner_name, icon_server,
-			 * original_format, last_update, geo, tags, machine_tags, o_dims,
-			 * views, media, path_alias, url_sq, url_t, url_s, url_m, url_o
-			 */
-
-			extras.add("date_upload");
-			extras.add("original_format");
-			extras.add("media");
-			// extras.add("url_o");
-			extras.add("tags");
-
-			int setPage = 1;
-			while (true) {
-				PhotoList<Photo> tmpSet = pi.getPhotos(setid, extras, Flickr.PRIVACY_LEVEL_NO_FILTER, 500, setPage);
-
-				int tmpSetSize = tmpSet.size();
-				photos.addAll(tmpSet);
-				if (tmpSetSize < 500) {
-					break;
-				}
-				setPage++;
-			}
-			for (int i = 0; i < photos.size(); i++) {
-				filePhotos.put(photos.get(i).getTitle(), photos.get(i));
-			}
-			if (flickrDebug) {
-				logger.debug("Set title: " + setName + "  id:  " + setid + " found");
-				logger.debug("   Photos in Set already loaded: " + photos.size());
-			}
-		}
-	}
-
 	private void addPhotoToSet(String photoid, String setName) throws Exception {
-
-		ArrayList<String> setIdarr;
-
-		// all_set_maps.
-
 		PhotosetsInterface psetsInterface = flickr.getPhotosetsInterface();
 
-		Photoset set = null;
-
-		if (setid == null) {
-			// In case it is a new photo-set.
-			setIdarr = setNameToId.get(setName);
-			if (setIdarr == null) {
-				// setIdarr should be null since we checked it getSetPhotos.
-				// Create the new set.
-				// set the setid .
-
-				String description = "";
-				set = psetsInterface.create(setName, description, photoid);
-				setid = set.getId();
-
-				setIdarr = new ArrayList<String>();
-				setIdarr.add(new String(setid));
-				setNameToId.put(setName, setIdarr);
-
-				allSetsMap.put(set.getId(), set);
-			}
-		} else {
-			set = allSetsMap.get(setid);
-			psetsInterface.addPhoto(setid, photoid);
+		String photoSetId = allSetsMap.get(setName);
+		if (photoSetId == null) {
+			photoSetId = psetsInterface.create(setName, "", photoid).getId();
+			allSetsMap.put(setName, photoSetId);
 		}
-		// Add to photos .
-
-		// Add Photo to existing set.
-		PhotosInterface photoInt = flickr.getPhotosInterface();
-		Photo p = photoInt.getPhoto(photoid);
-		if (p != null) {
-			photos.add(p);
-			String title;
-			if (basefilename.lastIndexOf('.') > 0)
-				title = basefilename.substring(0, basefilename.lastIndexOf('.'));
-			else
-				title = p.getTitle();
-			filePhotos.put(title, p);
-		}
+		psetsInterface.addPhoto(photoSetId, photoid);
 	}
 }
