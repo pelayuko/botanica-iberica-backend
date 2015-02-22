@@ -13,5 +13,6 @@
 		<class>org.pelayo.model.Zona</class>
 		<class>org.pelayo.model.Sector</class>
 		<class>org.pelayo.model.VincSectoresZona</class>
+		<class>org.pelayo.model.FitoTipo</class>
 	</persistence-unit>
 </persistence>

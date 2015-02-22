@@ -37,7 +37,9 @@ public class Especie implements Serializable {
 
 	private String fitoSubtipo;
 
-	private String fitoTipo;
+	@ManyToOne
+	@JoinColumn(name="FitoTipo")
+	private FitoTipo fitoTipo;
 
 	private Byte foranea;
 
@@ -159,11 +161,11 @@ public class Especie implements Serializable {
 		this.fitoSubtipo = fitoSubtipo;
 	}
 
-	public String getFitoTipo() {
+	public FitoTipo getFitoTipo() {
 		return this.fitoTipo;
 	}
 
-	public void setFitoTipo(String fitoTipo) {
+	public void setFitoTipo(FitoTipo fitoTipo) {
 		this.fitoTipo = fitoTipo;
 	}
 

@@ -266,6 +266,8 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 				.withTag(FlickrHelper.PAISAJE_PREFIX) //
 				.withTag(fotoLugar.getZona().getNombre()) //
 				.withTag(fotoLugar.getSectorName()) //
+				.withTag("Aragón") //
+				.withTag("Spain") //
 				.withTag("Flora Ibérica");
 	}
 
@@ -274,6 +276,12 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 		String name = cita.getEspecie().getNomespec().getNombreGen() + " "
 				+ MyStringUtils.voidIfNull(cita.getEspecie().getNomespec().getRestrictEsp()) + " "
 				+ MyStringUtils.voidIfNull(cita.getEspecie().getNomespec().getRestrSubesp());
+		
+		String nombreFitoTipo = null;
+		if (cita.getEspecie().getFitoTipo() != null) {
+			nombreFitoTipo = cita.getEspecie().getFitoTipo().getTipo();
+		}
+		
 		return PhotoUploadModel.mk().withFileName(fullPath)
 				.withAlbumName(FlickrHelper.PLANTA_PREFIX + " " + fotoPlanta.getSectorName())
 				//
@@ -287,11 +295,13 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 				.withTag(cita.getEspecie().getNomespec().getNombreGen()) //
 				.withTag(cita.getZona().getNombre()) //
 				.withTag(fotoPlanta.getSectorName()) //
-
 				.withTag(cita.getEspecie().getGenero().getNombreGen()) //
 				.withTag(cita.getEspecie().getGenero().getNomComun()) //
 				.withTag(cita.getEspecie().getGenero().getFamilia().getNombreFam()) //
 				.withTag(name) //
+				.withTag(nombreFitoTipo) //
+				.withTag("Aragón") //
+				.withTag("Spain") //
 				.withTag("Flora Ibérica");
 	}
 
