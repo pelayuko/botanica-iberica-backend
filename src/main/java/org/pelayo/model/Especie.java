@@ -45,7 +45,9 @@ public class Especie implements Serializable {
 
 	private String frecSoria;
 
-	private String género;
+	@ManyToOne
+	@JoinColumn(name="Género")
+	private Genero género;
 
 	private String idJaca;
 
@@ -189,11 +191,11 @@ public class Especie implements Serializable {
 		this.frecSoria = frecSoria;
 	}
 
-	public String getGenero() {
+	public Genero getGenero() {
 		return this.género;
 	}
 
-	public void setGenero(String género) {
+	public void setGenero(Genero género) {
 		this.género = género;
 	}
 

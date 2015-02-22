@@ -39,7 +39,9 @@ public class Cita implements Serializable {
 
 	private String coord;
 
-	private Integer especie;
+	@ManyToOne
+	@JoinColumn(name = "Especie")
+	private Especie especie;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
@@ -101,11 +103,11 @@ public class Cita implements Serializable {
 		this.coord = coord;
 	}
 
-	public Integer getEspecie() {
+	public Especie getEspecie() {
 		return this.especie;
 	}
 
-	public void setEspecie(Integer especie) {
+	public void setEspecie(Especie especie) {
 		this.especie = especie;
 	}
 

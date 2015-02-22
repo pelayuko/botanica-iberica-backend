@@ -1,3 +1,4 @@
 .settings/
 target/
 src/main/resources/setup.properties
+src/main/resources/personal.properties

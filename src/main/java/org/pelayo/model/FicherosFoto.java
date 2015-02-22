@@ -9,15 +9,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
 
-
 /**
  * The persistent class for the ficherosfotos database table.
  * 
  */
 @Entity
-@Table(name="ficherosfotos")
-@NamedQuery(name="Ficherosfoto.findAll", query="SELECT f FROM FicherosFoto f")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@Table(name = "ficherosfotos")
+@NamedQuery(name = "Ficherosfoto.findAll", query = "SELECT f FROM FicherosFoto f")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class FicherosFoto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,14 +25,18 @@ public class FicherosFoto implements Serializable {
 
 	private String flickrId;
 
+	private String flickrUrl;
+
+	private String flickrStatus;
+
 	private String path;
 
-	//bi-directional many-to-one association to Fotoslugare
-	@OneToMany(mappedBy="ficherosfoto")
+	// bi-directional many-to-one association to Fotoslugare
+	@OneToMany(mappedBy = "ficherosfoto")
 	private List<FotoLugar> fotoslugares;
 
-	//bi-directional many-to-one association to Fotosplanta
-	@OneToMany(mappedBy="ficherosfoto")
+	// bi-directional many-to-one association to Fotosplanta
+	@OneToMany(mappedBy = "ficherosfoto")
 	private List<FotoPlanta> fotosplantas;
 
 	public FicherosFoto() {
@@ -53,6 +56,14 @@ public class FicherosFoto implements Serializable {
 
 	public void setFlickrId(String flickrId) {
 		this.flickrId = flickrId;
+	}
+
+	public String getFlickrUrl() {
+		return this.flickrUrl;
+	}
+
+	public void setFlickrUrl(String flickrUrl) {
+		this.flickrUrl = flickrUrl;
 	}
 
 	public String getPath() {
@@ -91,6 +102,14 @@ public class FicherosFoto implements Serializable {
 
 	public void setFotosplantas(List<FotoPlanta> fotosplantas) {
 		this.fotosplantas = fotosplantas;
+	}
+
+	public String getFlickrStatus() {
+		return flickrStatus;
+	}
+
+	public void setFlickrStatus(String flickrStatus) {
+		this.flickrStatus = flickrStatus;
 	}
 
 	public FotoPlanta addFotosplanta(FotoPlanta fotosplanta) {

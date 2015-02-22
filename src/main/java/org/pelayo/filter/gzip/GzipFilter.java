@@ -1,4 +1,4 @@
-package org.pelayo;
+package org.pelayo.filter.gzip;
 
 import java.io.IOException;
 

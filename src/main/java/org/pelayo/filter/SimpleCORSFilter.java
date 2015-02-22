@@ -1,4 +1,4 @@
-package org.pelayo;
+package org.pelayo.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

@@ -8,10 +8,10 @@
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>java:org.pelayo.BotanicaBackendApplication</config>
-		<config>java:org.pelayo.BulkFotosCommand</config>
+		<config>java:org.pelayo.dev.photo.BulkFotosCommand</config>
 	</configs>
 	<autoconfigs>
-		<config>java:org.pelayo.dev.flickr.FlickrUploader</config>
+		<config>java:org.pelayo.dev.flickr.FlickrUploaderBotanica</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

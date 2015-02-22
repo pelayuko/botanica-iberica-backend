@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "fotoslugares")
 @NamedQuery(name = "Fotoslugare.findAll", query = "SELECT f FROM FotoLugar f")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idIdent")
-public class FotoLugar implements SectorProvider, Serializable {
+public class FotoLugar implements IFoto, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
