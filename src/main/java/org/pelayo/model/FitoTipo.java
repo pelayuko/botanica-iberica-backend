@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "fitotipos")
 @NamedQuery(name = "FitoTipo.findAll", query = "SELECT s FROM FitoTipo s")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "etiq")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "abrev")
 public class FitoTipo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
