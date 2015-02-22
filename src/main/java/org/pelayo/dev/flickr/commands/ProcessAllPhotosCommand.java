@@ -43,7 +43,7 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 
 	private static final Logger log = Logger.getLogger(ProcessAllPhotosCommand.class);
 
-	private static final int NUMBER_EXECUTORS = 6;
+	private static final int NUMBER_EXECUTORS = 9;
 
 	private static final String ERROR = "ERROR";
 
@@ -266,7 +266,7 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 				.withTag(FlickrHelper.PAISAJE_PREFIX) //
 				.withTag(fotoLugar.getZona().getNombre()) //
 				.withTag(fotoLugar.getSectorName()) //
-				.withTag("'Flora Ibérica'");
+				.withTag("Flora Ibérica");
 	}
 
 	private PhotoUploadModel _createPhotoUploadModel(FotoPlanta fotoPlanta, String fullPath) {
@@ -292,7 +292,7 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 				.withTag(cita.getEspecie().getGenero().getNomComun()) //
 				.withTag(cita.getEspecie().getGenero().getFamilia().getNombreFam()) //
 				.withTag(name) //
-				.withTag("'Flora Ibérica'");
+				.withTag("Flora Ibérica");
 	}
 
 }
