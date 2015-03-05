@@ -116,7 +116,7 @@ public abstract class AbstractUploadCommand<T, Y extends IModel> extends Abstrac
 				//
 				.withName(name)
 				//
-				.withDescription(fotoPlanta.getComentario() + "\n" + MyStringUtils.voidIfNull(cita.getComentario())) //
+				.withDescription(MyStringUtils.voidIfNull(fotoPlanta.getComentario()) + "\n" + MyStringUtils.voidIfNull(cita.getComentario())) //
 				.withGeoData(GeoDataModel.fromUTM(cita.getCoord())) //
 				.withTag(FlickrHelper.PLANTA_PREFIX) //
 				.withTag(cita.getEspecie().getColor()) //

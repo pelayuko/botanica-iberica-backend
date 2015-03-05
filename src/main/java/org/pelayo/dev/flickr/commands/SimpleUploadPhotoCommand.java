@@ -58,7 +58,7 @@ public class SimpleUploadPhotoCommand extends AbstractUploadCommand<Boolean, Sim
 			throw new RuntimeException("Photo with id " + model.getPhotoId() + " not found!");
 		}
 
-		String path = foto.getSectorName() + "/" + foto.getFichero() + ".jpg";
+		String path = foto.getSectorName() + "/" + foto.getFichero().replace("\\", "/") + ".jpg";
 
 		String fullPath = basePath + "/" + path;
 		File f = new File(fullPath);
@@ -73,10 +73,10 @@ public class SimpleUploadPhotoCommand extends AbstractUploadCommand<Boolean, Sim
 			ficheroFoto = createFicheroFoto(ctx, repo, foto, path);
 		}
 
-		if (FlickrHelper.SUCCESS.equals(ficheroFoto.getFlickrStatus())) {
-			log.info(ficheroFoto.getPath() + " is already uploaded!!, SKIPPING");
-			return;
-		}
+//		if (FlickrHelper.SUCCESS.equals(ficheroFoto.getFlickrStatus())) {
+//			log.info(ficheroFoto.getPath() + " is already uploaded!!, SKIPPING");
+//			return;
+//		}
 
 		PhotoUploadModel uhotoUploadModel = createPhotoUploadModel(foto, fullPath);
 		Photo photo = executeSafeUpload(uhotoUploadModel, ficheroFoto);
