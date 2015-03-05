@@ -93,9 +93,8 @@ public class PhotoUploadModel implements IModel {
 			tags = new ArrayList<String>();
 		}
 
-		String t = "'" + tag.replaceAll("'", "").replaceAll(",", " ").replaceAll("  ", " ").trim() + "'";
-		tags.add(t);
-		
+		tags.add("\"" + tag.replaceAll("'", "").replaceAll(",", " ").replaceAll("  ", " ").trim() + "\"");
+
 		return this;
 	}
 
