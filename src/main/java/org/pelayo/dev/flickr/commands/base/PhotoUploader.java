@@ -1,4 +1,4 @@
-package org.pelayo.dev.flickr.commands;
+package org.pelayo.dev.flickr.commands.base;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.pelayo.dev.flickr.commands.base.AbstractAuthorizedBaseCommand;
 import org.pelayo.dev.flickr.model.AuthorizedCommandModel;
 import org.pelayo.dev.flickr.model.PhotoUploadModel;
 import org.pelayo.dev.flickr.util.FlickrHelper;
@@ -46,9 +45,9 @@ import com.flickr4java.flickr.uploader.Uploader;
  * @author Keyur Parikh
  */
 
-public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, PhotoUploadModel> {
+public class PhotoUploader extends AbstractAuthorizedBaseCommand<Photo, PhotoUploadModel> {
 
-	private static final Logger logger = Logger.getLogger(UploadPhotoCommand.class);
+	private static final Logger logger = Logger.getLogger(PhotoUploader.class);
 
 	public boolean flickrDebug = false;
 
@@ -58,7 +57,7 @@ public class UploadPhotoCommand extends AbstractAuthorizedBaseCommand<Photo, Pho
 
 	public static final SimpleDateFormat smp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss a");
 
-	public UploadPhotoCommand(AuthorizedCommandModel model) throws Exception {
+	public PhotoUploader(AuthorizedCommandModel model) throws Exception {
 		super(model);
 
 		if (!canUpload()) {

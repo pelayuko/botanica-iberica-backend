@@ -66,8 +66,7 @@ public class BulkFotosCommand {
 
 	}
 
-	public <T extends IFoto> void createFotos(ApplicationContext ctx, JpaRepository<T, Long> repo,
-			String basePath) {
+	public <T extends IFoto> void createFotos(ApplicationContext ctx, JpaRepository<T, Integer> repo, String basePath) {
 		List<T> fotosConSector = repo.findAll();
 
 		for (T sectorProvider : fotosConSector) {
@@ -87,7 +86,7 @@ public class BulkFotosCommand {
 
 	}
 
-	public <T extends IFoto> void createFicheroFoto(ApplicationContext ctx, JpaRepository<T, Long> repo,
+	public <T extends IFoto> void createFicheroFoto(ApplicationContext ctx, JpaRepository<T, Integer> repo,
 			T sectorProvider, String path) {
 		FicherosFoto ficheroFoto = new FicherosFoto();
 		ficheroFoto.setId(UUID.randomUUID().toString());

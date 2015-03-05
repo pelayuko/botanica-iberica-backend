@@ -9,9 +9,9 @@
 	<configs>
 		<config>java:org.pelayo.BotanicaBackendApplication</config>
 		<config>java:org.pelayo.dev.photo.BulkFotosCommand</config>
+		<config>java:org.pelayo.dev.flickr.BulkFlickrUploaderBotanica</config>
 	</configs>
 	<autoconfigs>
-		<config>java:org.pelayo.dev.flickr.FlickrUploaderBotanica</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

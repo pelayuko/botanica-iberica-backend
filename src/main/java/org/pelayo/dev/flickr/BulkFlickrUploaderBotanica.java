@@ -20,9 +20,9 @@ import com.flickr4java.flickr.REST;
 @Configuration
 @ComponentScan("org.pelayo")
 @EnableAutoConfiguration
-public class FlickrUploaderBotanica {
+public class BulkFlickrUploaderBotanica {
 
-	private static final Logger log = Logger.getLogger(FlickrUploaderBotanica.class);
+	private static final Logger log = Logger.getLogger(BulkFlickrUploaderBotanica.class);
 
 	private FlickrProps props;
 
@@ -36,8 +36,8 @@ public class FlickrUploaderBotanica {
 			System.exit(1);
 		}
 
-		ApplicationContext ctx = SpringApplication.run(FlickrUploaderBotanica.class, args);
-		FlickrUploaderBotanica flickrUploader = new FlickrUploaderBotanica();
+		ApplicationContext ctx = SpringApplication.run(BulkFlickrUploaderBotanica.class, args);
+		BulkFlickrUploaderBotanica flickrUploader = new BulkFlickrUploaderBotanica();
 		flickrUploader.props = ctx.getBean(FlickrProps.class);
 		if (flickrUploader.props == null) {
 			throw new RuntimeException("Props is null!!");
@@ -94,7 +94,7 @@ public class FlickrUploaderBotanica {
 	}
 
 	private static void Usage() {
-		System.out.println("Usage: java " + FlickrUploaderBotanica.class.getName()
+		System.out.println("Usage: java " + BulkFlickrUploaderBotanica.class.getName()
 				+ "  [ -pt | -pn | -pu | -al | -delete ]");
 		System.out.println("	pt -> Rerocess tags, asumming photos are uploaded ");
 		System.out.println("	pn -> Reprocess names, asumming photos are uploaded ");

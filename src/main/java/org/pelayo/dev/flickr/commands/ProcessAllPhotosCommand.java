@@ -1,6 +1,5 @@
 package org.pelayo.dev.flickr.commands;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -8,34 +7,26 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
-import org.pelayo.dao.FicherosFotoRepository;
 import org.pelayo.dao.FotosLugaresRepository;
 import org.pelayo.dao.FotosPlantasRepository;
 import org.pelayo.dao.FotosRepository;
-import org.pelayo.dev.flickr.commands.base.AbstractAuthorizedBaseCommand;
+import org.pelayo.dev.flickr.commands.base.AbstractUploadCommand;
 import org.pelayo.dev.flickr.config.FlickrProps;
 import org.pelayo.dev.flickr.model.AuthorizedCommandModel;
-import org.pelayo.dev.flickr.model.GeoDataModel;
 import org.pelayo.dev.flickr.model.PhotoUploadModel;
 import org.pelayo.dev.flickr.model.VoidModel;
 import org.pelayo.dev.flickr.util.FlickrHelper;
-import org.pelayo.dev.flickr.util.MyStringUtils;
-import org.pelayo.model.Cita;
 import org.pelayo.model.FicherosFoto;
-import org.pelayo.model.FotoLugar;
-import org.pelayo.model.FotoPlanta;
 import org.pelayo.model.IFoto;
 import org.pelayo.storage.config.FotoFloraConfiguration;
 import org.pelayo.storage.config.FotoPaisajesConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.xml.sax.SAXException;
 
-import com.flickr4java.flickr.Flickr;
 import com.flickr4java.flickr.FlickrException;
-import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.photos.Photo;
 
-public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integer, VoidModel> {
+public class ProcessAllPhotosCommand extends AbstractUploadCommand<Integer, VoidModel> {
 
 	public enum Mode {
 		TAG, UPLOAD, RENAME
@@ -45,28 +36,18 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 
 	private static final int NUMBER_EXECUTORS = 9;
 
-	private static final String ERROR = "ERROR";
-
-	private static final String SUCCESS = "SUCCESS";
-
 	private static final AtomicInteger sequence = new AtomicInteger(0);
 
 	private static final AtomicInteger sequenceErrors = new AtomicInteger(0);
 
 	private static final AtomicInteger sequenceMissingFile = new AtomicInteger(0);
 
-	private ApplicationContext ctx;
-
 	private Mode mode;
-
-	private FlickrProps props;
 
 	public ProcessAllPhotosCommand(ApplicationContext ctx, AuthorizedCommandModel model, FlickrProps props, Mode mode)
 			throws Exception {
-		super(model);
-		this.ctx = ctx;
+		super(ctx, model, props);
 		this.mode = mode;
-		this.props = props;
 	}
 
 	@Override
@@ -138,7 +119,6 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 
 		@Override
 		public void run() {
-			UploadPhotoCommand upPhoto = newUploadPhotoCommand();
 			log.info("FOTOS TO ITERATE " + fotos.size());
 			for (T foto : fotos) {
 				FicherosFoto ficheroFoto = foto.getFicherosfoto();
@@ -148,7 +128,7 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 				}
 
 				if (Mode.UPLOAD.equals(mode)) {
-					if (SUCCESS.equals(ficheroFoto.getFlickrStatus())) {
+					if (FlickrHelper.SUCCESS.equals(ficheroFoto.getFlickrStatus())) {
 						log.info(ficheroFoto.getPath() + " is already uploaded, SKIPPING");
 						continue;
 					}
@@ -161,17 +141,19 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 
 				switch (mode) {
 				case RENAME:
-					executeSafeRename(upPhoto, model, ficheroFoto);
+					executeSafeRename(model, ficheroFoto);
 					break;
 				case TAG:
-					executeSafeRetag(upPhoto, model, ficheroFoto);
+					executeSafeRetag(model, ficheroFoto);
 					break;
 				case UPLOAD:
-					Photo photo = executeSafeUpload(upPhoto, model, ficheroFoto);
+					Photo photo = executeSafeUpload(model, ficheroFoto);
 					if (photo != null) {
 						log.trace("\tPhoto static url "
 								+ String.format("https://farm%s.staticflickr.com/%s/%s_%s.jpg", photo.getFarm(),
 										photo.getServer(), photo.getId(), photo.getSecret()));
+					} else {
+						log.info(sequenceErrors.incrementAndGet() + " Error uploading: " + model.getFileName());
 					}
 					break;
 				default:
@@ -180,129 +162,23 @@ public class ProcessAllPhotosCommand extends AbstractAuthorizedBaseCommand<Integ
 			}
 		}
 
-		private Flickr newFlickr() {
-			return new Flickr(props.getKey(), props.getSecret(), new REST());
-		}
-
-		private UploadPhotoCommand newUploadPhotoCommand() {
-
-			try {
-				return new UploadPhotoCommand(AuthorizedCommandModel.mk().withFlickr(newFlickr())
-						.withUsername(props.getUsername()));
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
 	}
 
-	private void executeSafeRename(UploadPhotoCommand upPhoto, PhotoUploadModel model, FicherosFoto ficheroFoto) {
+	private void executeSafeRename(PhotoUploadModel model, FicherosFoto ficheroFoto) {
 		try {
-			upPhoto.getFlickr().getPhotosInterface()
-					.setMeta(ficheroFoto.getFlickrId(), model.getName(), model.getDescription());
+			flickr.getPhotosInterface().setMeta(ficheroFoto.getFlickrId(), model.getName(), model.getDescription());
 		} catch (FlickrException e) {
 			log.info(sequenceErrors.incrementAndGet() + " Error renaming: " + model.getFileName());
 		}
 	}
 
-	private void executeSafeRetag(UploadPhotoCommand upPhoto, PhotoUploadModel model, FicherosFoto ficheroFoto) {
+	private void executeSafeRetag(PhotoUploadModel model, FicherosFoto ficheroFoto) {
 		try {
-			upPhoto.getFlickr().getPhotosInterface()
-					.setTags(ficheroFoto.getFlickrId(), model.getTags().toArray(new String[model.getTags().size()]));
+			flickr.getPhotosInterface().setTags(ficheroFoto.getFlickrId(),
+					model.getTags().toArray(new String[model.getTags().size()]));
 		} catch (FlickrException e) {
 			log.info(sequenceErrors.incrementAndGet() + " Error setting tags: " + model.getFileName());
 		}
-	}
-
-	private Photo executeSafeUpload(UploadPhotoCommand upPhoto, PhotoUploadModel model, FicherosFoto ficheroFoto) {
-		Photo photo = null;
-		FicherosFotoRepository fichFotosRepository = ctx.getBean(FicherosFotoRepository.class);
-		try {
-			File f = new File(model.getFileName());
-			if (!f.exists()) {
-				throw new IllegalArgumentException("File not exists " + f.getName());
-			}
-			if (f.isDirectory()) {
-				throw new IllegalArgumentException("Not supported for directories " + f.getName());
-			}
-			photo = upPhoto.execute(model);
-
-			ficheroFoto.setFlickrId(photo.getId());
-			ficheroFoto.setFlickrUrl(String.format("https://farm%s.staticflickr.com/%s/%s_%s.jpg", photo.getFarm(),
-					photo.getServer(), photo.getId(), photo.getSecret()));
-			ficheroFoto.setFlickrStatus(SUCCESS);
-			fichFotosRepository.save(ficheroFoto);
-		} catch (Exception e) {
-			log.info(sequenceErrors.incrementAndGet() + " Error uploading: " + model.getFileName());
-			ficheroFoto.setFlickrStatus(ERROR);
-			fichFotosRepository.save(ficheroFoto);
-		}
-		return photo;
-
-	}
-
-	private PhotoUploadModel createPhotoUploadModel(IFoto foto, String fullPath) {
-		// FIXME: implement visitor pattern!
-		if (foto instanceof FotoPlanta) {
-			return _createPhotoUploadModel((FotoPlanta) foto, fullPath);
-		}
-		if (foto instanceof FotoLugar) {
-			return _createPhotoUploadModel((FotoLugar) foto, fullPath);
-		}
-		throw new RuntimeException("Unsupported class " + foto.getFichero());
-	}
-
-	private PhotoUploadModel _createPhotoUploadModel(FotoLugar fotoLugar, String fullPath) {
-		return PhotoUploadModel.mk()
-				.withFileName(fullPath)
-				//
-				.withAlbumName(FlickrHelper.PAISAJE_PREFIX + " " + fotoLugar.getSectorName())
-				//
-				.withName(fotoLugar.getComentario())
-				//
-				.withDescription(
-						fotoLugar.getZona().getNombre() + "\n"
-								+ MyStringUtils.voidIfNull(fotoLugar.getZona().getDescripción())) //
-				.withGeoData(GeoDataModel.fromUTM(fotoLugar.getCoord())) //
-				.withTag(FlickrHelper.PAISAJE_PREFIX) //
-				.withTag(fotoLugar.getZona().getNombre()) //
-				.withTag(fotoLugar.getSectorName()) //
-				.withTag("Aragón") //
-				.withTag("Spain") //
-				.withTag("Flora Ibérica");
-	}
-
-	private PhotoUploadModel _createPhotoUploadModel(FotoPlanta fotoPlanta, String fullPath) {
-		Cita cita = fotoPlanta.getCita();
-		String name = cita.getEspecie().getNomespec().getNombreGen() + " "
-				+ MyStringUtils.voidIfNull(cita.getEspecie().getNomespec().getRestrictEsp()) + " "
-				+ MyStringUtils.voidIfNull(cita.getEspecie().getNomespec().getRestrSubesp());
-		
-		String nombreFitoTipo = null;
-		if (cita.getEspecie().getFitoTipo() != null) {
-			nombreFitoTipo = cita.getEspecie().getFitoTipo().getTipo();
-		}
-		
-		return PhotoUploadModel.mk().withFileName(fullPath)
-				.withAlbumName(FlickrHelper.PLANTA_PREFIX + " " + fotoPlanta.getSectorName())
-				//
-				.withName(name)
-				//
-				.withDescription(fotoPlanta.getComentario() + "\n" + MyStringUtils.voidIfNull(cita.getComentario())) //
-				.withGeoData(GeoDataModel.fromUTM(cita.getCoord())) //
-				.withTag(FlickrHelper.PLANTA_PREFIX) //
-				.withTag(cita.getEspecie().getColor()) //
-				.withTag(cita.getEspecie().getGenero().getNombreGen()) //
-				.withTag(cita.getEspecie().getNomespec().getNombreGen()) //
-				.withTag(cita.getZona().getNombre()) //
-				.withTag(fotoPlanta.getSectorName()) //
-				.withTag(cita.getEspecie().getGenero().getNombreGen()) //
-				.withTag(cita.getEspecie().getGenero().getNomComun()) //
-				.withTag(cita.getEspecie().getGenero().getFamilia().getNombreFam()) //
-				.withTag(name) //
-				.withTag(nombreFitoTipo) //
-				.withTag("Aragón") //
-				.withTag("Spain") //
-				.withTag("Flora Ibérica");
 	}
 
 }

@@ -7,6 +7,10 @@ import org.apache.log4j.Logger;
 
 public class FlickrHelper {
 
+	public static final String ERROR = "ERROR";
+
+	public static final String SUCCESS = "SUCCESS";
+	
 	public static final String PAISAJE_PREFIX = "Paisaje";
 
 	public static final String PLANTA_PREFIX = "Plantas";
