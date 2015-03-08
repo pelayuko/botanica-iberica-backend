@@ -7,12 +7,12 @@ import org.apache.log4j.Logger;
 import org.pelayo.dao.FicherosFotoRepository;
 import org.pelayo.dao.FotosLugaresRepository;
 import org.pelayo.dao.FotosPlantasRepository;
+import org.pelayo.dao.FotosRepository;
 import org.pelayo.dev.flickr.commands.base.AbstractUploadCommand;
 import org.pelayo.dev.flickr.config.FlickrProps;
 import org.pelayo.dev.flickr.model.AuthorizedCommandModel;
 import org.pelayo.dev.flickr.model.PhotoUploadModel;
 import org.pelayo.dev.flickr.model.SimpleUploadPhotoModel;
-import org.pelayo.dev.flickr.util.FlickrHelper;
 import org.pelayo.model.FicherosFoto;
 import org.pelayo.model.IFoto;
 import org.pelayo.storage.config.FotoFloraConfiguration;
@@ -51,8 +51,7 @@ public class SimpleUploadPhotoCommand extends AbstractUploadCommand<Boolean, Sim
 		return Boolean.TRUE;
 	}
 
-	public <T extends IFoto> void createFoto(JpaRepository<T, Integer> repo, String basePath,
-			SimpleUploadPhotoModel model) {
+	public <T extends IFoto> void createFoto(JpaRepository<T, Integer> repo, String basePath, SimpleUploadPhotoModel model) {
 		T foto = repo.findOne(Integer.parseInt(model.getPhotoId()));
 		if (foto == null) {
 			throw new RuntimeException("Photo with id " + model.getPhotoId() + " not found!");
@@ -73,10 +72,10 @@ public class SimpleUploadPhotoCommand extends AbstractUploadCommand<Boolean, Sim
 			ficheroFoto = createFicheroFoto(ctx, repo, foto, path);
 		}
 
-//		if (FlickrHelper.SUCCESS.equals(ficheroFoto.getFlickrStatus())) {
-//			log.info(ficheroFoto.getPath() + " is already uploaded!!, SKIPPING");
-//			return;
-//		}
+		// if (FlickrHelper.SUCCESS.equals(ficheroFoto.getFlickrStatus())) {
+		// log.info(ficheroFoto.getPath() + " is already uploaded!!, SKIPPING");
+		// return;
+		// }
 
 		PhotoUploadModel uhotoUploadModel = createPhotoUploadModel(foto, fullPath);
 		Photo photo = executeSafeUpload(uhotoUploadModel, ficheroFoto);
