@@ -2,10 +2,15 @@ package org.pelayo.model;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
@@ -29,10 +34,6 @@ public class Genero implements Serializable {
 	private Integer  idDilInicial;
 
 	private Integer  identGen;
-
-	private Byte marca1;
-
-	private Byte marca2;
 
 	private Integer  NEspCult;
 
@@ -87,22 +88,6 @@ public class Genero implements Serializable {
 
 	public void setIdentGen(Integer  identGen) {
 		this.identGen = identGen;
-	}
-
-	public Byte getMarca1() {
-		return this.marca1;
-	}
-
-	public void setMarca1(Byte marca1) {
-		this.marca1 = marca1;
-	}
-
-	public Byte getMarca2() {
-		return this.marca2;
-	}
-
-	public void setMarca2(Byte marca2) {
-		this.marca2 = marca2;
 	}
 
 	public Integer  getNEspCult() {
