@@ -5,12 +5,14 @@ import java.io.FilenameFilter;
 
 import org.apache.log4j.Logger;
 
+import com.flickr4java.flickr.photos.Photo;
+
 public class FlickrHelper {
 
 	public static final String ERROR = "ERROR";
 
 	public static final String SUCCESS = "SUCCESS";
-	
+
 	public static final String PAISAJE_PREFIX = "Paisaje";
 
 	public static final String PLANTA_PREFIX = "Plantas";
@@ -69,5 +71,10 @@ public class FlickrHelper {
 				return false;
 		}
 
+	}
+
+	public static String buildUrl(Photo photo) {
+		return String.format("https://farm%s.staticflickr.com/%s/%s_%s.jpg", photo.getFarm(), photo.getServer(),
+				photo.getId(), photo.getSecret());
 	}
 }

@@ -57,8 +57,7 @@ public abstract class AbstractUploadCommand<T, Y extends IModel> extends Abstrac
 			photo = upPhoto.execute(model);
 
 			ficheroFoto.setFlickrId(photo.getId());
-			ficheroFoto.setFlickrUrl(String.format("https://farm%s.staticflickr.com/%s/%s_%s.jpg", photo.getFarm(),
-					photo.getServer(), photo.getId(), photo.getSecret()));
+			ficheroFoto.setFlickrUrl(FlickrHelper.buildUrl(photo));
 			ficheroFoto.setFlickrStatus(FlickrHelper.SUCCESS);
 			fichFotosRepository.save(ficheroFoto);
 		} catch (Exception e) {

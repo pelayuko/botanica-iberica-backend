@@ -70,7 +70,7 @@ public class Cita implements Serializable {
 
 	public Cita() {
 	}
-
+	
 	public Integer getId() {
 		return this.id;
 	}
