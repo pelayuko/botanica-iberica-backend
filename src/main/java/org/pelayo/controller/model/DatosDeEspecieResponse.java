@@ -6,7 +6,11 @@ public class DatosDeEspecieResponse {
 
 	private String IdentTaxon;
 
-	private TaxonResponse NombreTaxon;
+	private String genero;
+
+	private String familia;
+
+	private TaxonResponse DatosTaxon;
 
 	private List<CitaResponse> citas;
 
@@ -26,12 +30,12 @@ public class DatosDeEspecieResponse {
 		IdentTaxon = identTaxon;
 	}
 
-	public TaxonResponse getNombreTaxon() {
-		return NombreTaxon;
+	public TaxonResponse getDatosTaxon() {
+		return DatosTaxon;
 	}
 
-	public void setNombreTaxon(TaxonResponse nombreTaxon) {
-		NombreTaxon = nombreTaxon;
+	public void setDatosTaxon(TaxonResponse datosTaxon) {
+		DatosTaxon = datosTaxon;
 	}
 
 	public List<CitaResponse> getCitas() {
@@ -72,6 +76,22 @@ public class DatosDeEspecieResponse {
 
 	public void setInfo(InfoTaxonResponse info) {
 		this.info = info;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(String familia) {
+		this.familia = familia;
 	}
 
 }

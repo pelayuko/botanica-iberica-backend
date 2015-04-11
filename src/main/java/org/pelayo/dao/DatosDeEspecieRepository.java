@@ -84,14 +84,14 @@ public class DatosDeEspecieRepository {
 		return resultado.get(0);
 	}
 
-	public TaxonResponse leeFamiliayAutores(final String ident) {
-		String prueba = "select losAutores, Familia from ConsEspecie where elNombre = '" + ident + "'";
+	public TaxonResponse leeDatosTaxon(final String ident) {
+		String prueba = "select losAutores, Género, Familia from ConsEspecie where elNombre = '" + ident + "'";
 		TaxonResponse result = jdbcTemplate.queryForObject(prueba, 
 																	
 				new RowMapper<TaxonResponse>() {
 					@Override
 					public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-						return new TaxonResponse(ident, ident, rs.getString("Familia"));
+						return new TaxonResponse(ident, rs.getString("Género"), rs.getString("Familia"));
 					}
 				});
 		return result;

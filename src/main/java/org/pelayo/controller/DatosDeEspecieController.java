@@ -40,7 +40,7 @@ public class DatosDeEspecieController {
 		DatosDeEspecieResponse response = new DatosDeEspecieResponse();
 
 		response.setIdentTaxon(ident);
-		response.setNombreTaxon(repo.leeFamiliayAutores(ident));
+		response.setDatosTaxon(repo.leeDatosTaxon(ident));
 		response.setCitas(repo.getList(ident));
 		response.setFotos(repo.getListFotos(ident));
 		response.setSinonimos(repo.getListSinonimos(ident));

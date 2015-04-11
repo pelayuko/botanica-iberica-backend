@@ -4,21 +4,21 @@ public class TaxonResponse {
 
 	private String nombre;
 
-	private String taxon;
+	private String genero;
 
 	private String familia;
 
 	public TaxonResponse(String nombre) {
-		this(nombre, nombre);
-	}
-
-	public TaxonResponse(String nombre, String taxon) {
 		this.nombre = nombre;
-		this.taxon = taxon;
 	}
 
-	public TaxonResponse(String nombre, String taxon, String familia) {
-		this(nombre, taxon);
+	public TaxonResponse(String nombre, String genero) {
+		this.nombre = nombre;
+		this.genero = genero;
+	}
+
+	public TaxonResponse(String nombre, String genero, String familia) {
+		this(nombre, genero);
 		this.familia = familia;
 	}
 
@@ -38,11 +38,11 @@ public class TaxonResponse {
 		this.nombre = nombre;
 	}
 
-	public String getTaxon() {
-		return taxon;
+	public String getGenero() {
+		return genero;
 	}
 
-	public void setTaxon(String taxon) {
-		this.taxon = taxon;
+	public void setGenero(String genero) {
+		this.genero = genero;
 	}
 }
