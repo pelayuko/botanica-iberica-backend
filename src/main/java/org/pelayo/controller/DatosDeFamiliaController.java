@@ -28,11 +28,9 @@ public class DatosDeFamiliaController {
 		List<TaxonResponse> species = repo.getTaxonesByFamilia(familia);
 		resp.setEspecies(species);
 
-//		if (!species.isEmpty()) {
-//			resp.setFamilia(species.get(0).getFamilia());
-//		}
-
 		resp.setFotos(repo.getListFotos(familia, 6));
+		resp.setRefFloraIberica(repo.getRefFlora(familia));
+		resp.setGrupo(repo.getGrupoFam(familia));
 
 		return resp;
 	}

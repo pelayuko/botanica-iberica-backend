@@ -25,7 +25,7 @@ public class SearchController {
 		response.addAll(repo.buscaNombreGenero(nombre, Integer.parseInt(limit)));
 		response.addAll(repo.buscaNombreFamilia(nombre, Integer.parseInt(limit)));
 		response.addAll(repo.buscaNombreComun(nombre, Integer.parseInt(limit)));
-		response.addAll(repo.buscaNombreEspecie(nombre, Integer.parseInt(limit), false));
+		response.addAll(repo.buscaNombreEspecie(nombre, Integer.parseInt(limit), true));
 
 		return response;
 	}

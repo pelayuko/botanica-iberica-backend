@@ -12,6 +12,7 @@ import org.pelayo.controller.model.TaxonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class DatosDeFamiliaRepository {
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("Género"), rs.getString("Familia"));
+				return new TaxonResponse(rs.getString("elNombre"), "", rs.getString("Género"), rs.getString("Familia"));
 			}
 		});
 	}
@@ -53,4 +54,28 @@ public class DatosDeFamiliaRepository {
 
 	}
 
+    public String getRefFlora(String laFamilia) {		
+		String flora = jdbcTemplate.queryForObject(
+				"select ifnull(refFloraIberica,'-') as refFlIb from Familias where NombreFam = '" + laFamilia + "'", new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum)
+							throws SQLException {
+						return rs.getString("refFlIb");
+					}
+				});
+		if (flora.equals("-")) return "http://www.floraiberica.es";
+		else return "http://www.floraiberica.es/floraiberica/texto/pdfs/" + flora +".pdf";
+    }
+    
+    public String getGrupoFam(String laFamilia) {
+		String grupo = jdbcTemplate.queryForObject(
+				"select grupoFam from Familias where NombreFam = '" + laFamilia + "'", new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum)
+							throws SQLException {
+						return rs.getString("grupoFam");
+					}
+				});
+		return grupo;
+    }
 }

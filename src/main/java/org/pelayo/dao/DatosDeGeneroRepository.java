@@ -34,7 +34,7 @@ public class DatosDeGeneroRepository {
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Familia"));
+				return new TaxonResponse(rs.getString("elNombre"), "", genero, rs.getString("Familia"));
 			}
 		});
 	}

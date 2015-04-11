@@ -8,7 +8,9 @@ public class DatosDeFamiliaResponse {
 
 	private String familia;
 
-	private String genero;
+	private String grupo;
+
+	private String refFloraIberica;
 
 	private List<FotoResponse> fotos;
 
@@ -28,20 +30,28 @@ public class DatosDeFamiliaResponse {
 		this.familia = familia;
 	}
 
-	public String getGenero() {
-		return genero;
-	}
-
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
-
 	public List<FotoResponse> getFotos() {
 		return fotos;
 	}
 
 	public void setFotos(List<FotoResponse> fotos) {
 		this.fotos = fotos;
+	}
+
+	public String getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(String grupo) {
+		this.grupo = grupo;
+	}
+
+	public String getRefFloraIberica() {
+		return refFloraIberica;
+	}
+
+	public void setRefFloraIberica(String refFloraIberica) {
+		this.refFloraIberica = refFloraIberica;
 	}
 
 }

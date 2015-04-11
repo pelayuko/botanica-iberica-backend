@@ -55,7 +55,7 @@ public class TaxonesRepository {
 		new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return SearchResponse.mk(SearchType.ESPECIE).withTaxon(
+				return SearchResponse.mk(SearchType.ESPECIE_COMUN).withTaxon(
 						new TaxonResponse(rs.getString("nomaceptado"), rs.getString("elNombre")));
 			}
 		});
@@ -70,7 +70,7 @@ public class TaxonesRepository {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return SearchResponse.mk(SearchType.ESPECIE_COMUN).withTaxon(
-						new TaxonResponse(rs.getString("Nombre"), rs.getString("elNombre")));
+						new TaxonResponse(rs.getString("elNombre"), rs.getString("Nombre")));
 			}
 		});
 	}
@@ -83,8 +83,8 @@ public class TaxonesRepository {
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return SearchResponse.mk(SearchType.ESPECIE_COMUN).withTaxon(
-						new TaxonResponse(rs.getString("elNombre")));
+				return SearchResponse.mk(SearchType.ESPECIE).withTaxon(
+						new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre")));
 			}
 		});
 	}
@@ -107,7 +107,7 @@ public class TaxonesRepository {
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Familia"));
+				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Género"), rs.getString("Familia"));
 			}
 		});
 	}
@@ -172,7 +172,7 @@ public class TaxonesRepository {
 		List<TaxonResponse> results = jdbcTemplate.query(consulta, new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Familia"));
+				return new TaxonResponse(rs.getString("elNombre"), "", rs.getString("elNombre"), rs.getString("Familia"));
 			}
 		});
 		return results;
@@ -190,7 +190,7 @@ public class TaxonesRepository {
 		List<TaxonResponse> results = jdbcTemplate.query(consulta, new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Familia"));
+				return new TaxonResponse(rs.getString("elNombre"), "", rs.getString("elNombre"), rs.getString("Familia"));
 			}
 		});
 		return results;
