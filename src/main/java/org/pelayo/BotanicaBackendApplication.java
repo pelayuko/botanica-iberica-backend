@@ -12,9 +12,5 @@ public class BotanicaBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BotanicaBackendApplication.class, args);
-
-		// CustomerRepository repository =
-		// context.getBean(CustomerRepository.class);
-
 	}
 }
