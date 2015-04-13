@@ -48,14 +48,14 @@ public class TaxonesRepository {
 	}
 
 	public List<SearchResponse> buscaSinonimos(String nombreConSinonimos, int limit) {
-		String query = "select elNombre, nomaceptado from consinonimos where elNombre like '%" + nombreConSinonimos
+		String query = "select elNombre, nomaceptado from consinonimos where elNombre like '" + nombreConSinonimos
 				+ "%' limit " + limit;
 		return jdbcTemplate.query(query,
 
 		new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return SearchResponse.mk(SearchType.ESPECIE_COMUN).withTaxon(
+				return SearchResponse.mk(SearchType.ESPECIE).withTaxon(
 						new TaxonResponse(rs.getString("nomaceptado"), rs.getString("elNombre")));
 			}
 		});

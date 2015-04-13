@@ -24,8 +24,9 @@ public class SearchController {
 		response.addAll(repo.buscaNombreZonas(nombre));
 		response.addAll(repo.buscaNombreGenero(nombre, Integer.parseInt(limit)));
 		response.addAll(repo.buscaNombreFamilia(nombre, Integer.parseInt(limit)));
+		response.addAll(repo.buscaSinonimos(nombre, Integer.parseInt(limit)));
+//		response.addAll(repo.buscaNombreEspecie(nombre, Integer.parseInt(limit), true));
 		response.addAll(repo.buscaNombreComun(nombre, Integer.parseInt(limit)));
-		response.addAll(repo.buscaNombreEspecie(nombre, Integer.parseInt(limit), true));
 
 		return response;
 	}
