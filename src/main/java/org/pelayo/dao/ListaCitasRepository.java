@@ -43,7 +43,26 @@ public class ListaCitasRepository {
 			}
 		});
 	}
-
+	
+	public List<CitaResponse> listaCitasJacaByUtmsTaxon(String taxon) {
+		String consulta = "select idJaca from ConsEspecie where elNombre = '" + taxon + "'";
+		String codigo =
+		jdbcTemplate.queryForObject(consulta, new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString("idJaca");							
+				}
+		});
+		consulta = "select utm1 from jaca_comarca where cod_planta like '" + codigo + "%'";
+		return jdbcTemplate.query(consulta, new RowMapper<CitaResponse>() {
+			@Override
+			public CitaResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
+				String lautm = rs.getString("utm1");
+				return new CitaResponse(lautm, "Jaca");
+			}
+		});
+	}
+	
 	public List<CitaResponse> listaCitasByUtmsZona(String zona) {
 		String etiq = "", consulta;
 

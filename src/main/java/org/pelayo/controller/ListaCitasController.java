@@ -23,6 +23,11 @@ public class ListaCitasController {
 	public List<CitaResponse> listaCitasByUtmsTaxon(@RequestParam(value = "taxon", required = true) String taxon) {
 		return repo.listaCitasByUtmsTaxon(taxon);
 	}
+	
+	@RequestMapping("/listaCitasJacaByUtmsTaxon")
+	public List<CitaResponse> listaCitasJacaByUtmsTaxon(@RequestParam(value = "taxon", required = true) String taxon) {
+		return repo.listaCitasJacaByUtmsTaxon(taxon);
+	}
 
 	@RequestMapping("/listaCitasByUtmsZona")
 	public List<CitaResponse> listaCitasByUtmsZona(@RequestParam(value = "zona", required = true) String zona) {
