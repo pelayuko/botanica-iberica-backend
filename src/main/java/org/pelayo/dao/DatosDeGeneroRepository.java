@@ -27,7 +27,7 @@ public class DatosDeGeneroRepository {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	public List<TaxonResponse> getTaxonesByGenero(String genero) {
+	public List<TaxonResponse> getTaxonesByGenero(final String genero) {
 		String query = "select identEsp,Género,elNombre, Familia from ConsEspecie where Género = '" + genero + "'";
 		return jdbcTemplate.query(query,
 
