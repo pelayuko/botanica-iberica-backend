@@ -44,7 +44,7 @@ public class DatosDeEspecieRepository {
 		String comparator = prev ? " < " : " > ";
 		String result = "";
 		result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
-				+ "' and not foranea order by idPirineos desc limit 1", new RowMapper<String>() {
+				+ "' and not foranea order by idPirineos " + (prev ? "desc" : "asc" ) + " limit 1", new RowMapper<String>() {
 			@Override
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return rs.getString("elNombre");
