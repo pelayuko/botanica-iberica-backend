@@ -1,5 +1,7 @@
 package org.pelayo.dao;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +30,11 @@ public class DatosDeEspecieRepository {
 	
 	public String relativeTaxon(String actual, boolean prev) {
 		String idPirineos = "";
-		idPirineos = jdbcTemplate.queryForObject("select idPirineos from ConsEspecie where elNombre = " + actual,
+		try {
+			actual = URLDecoder.decode(actual, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		idPirineos = jdbcTemplate.queryForObject("select idPirineos from ConsEspecie where elNombre = '" + actual + "'",
 				new RowMapper<String>() {
 					@Override
 					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -133,8 +139,7 @@ public class DatosDeEspecieRepository {
 				new RowMapper<FotoResponse>() {
 					@Override
 					public FotoResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-						String temp = rs.getString("flickrUrl");
-						return new FotoResponse(temp, rs.getString("coment"), rs.getString("UTM"));
+						return new FotoResponse(rs.getString("flickrUrl"), rs.getString("coment"), rs.getString("UTM"));
 					}
 				});
 		return results;

@@ -22,13 +22,13 @@ public class DatosDeEspecieController {
 	}
 
 	@RequestMapping("/datosDeEspecieNext")
-	public DatosDeEspecieResponse datosDeEspecieNext(@RequestParam(value = "actual", required = true) String actual) {
-		return getDatosEspecie(repo.relativeTaxon(actual, false));
+	public DatosDeEspecieResponse datosDeEspecieNext(@RequestParam(value = "ident", required = true) String ident) {
+		return getDatosEspecie(repo.relativeTaxon(ident, false));
 	}
 
 	@RequestMapping("/datosDeEspeciePrev")
-	public DatosDeEspecieResponse datosDeEspeciePrev(@RequestParam(value = "actual", required = true) String actual) {
-		return getDatosEspecie(repo.relativeTaxon(actual, true));
+	public DatosDeEspecieResponse datosDeEspeciePrev(@RequestParam(value = "ident", required = true) String ident) {
+		return getDatosEspecie(repo.relativeTaxon(ident, true));
 	}
 
 	@RequestMapping("/datosDeEspecie")

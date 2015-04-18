@@ -12,6 +12,8 @@ import org.pelayo.dev.flickr.model.AuthorizedCommandModel;
 import org.pelayo.dev.flickr.model.VoidModel;
 import org.pelayo.dev.flickr.util.FlickrHelper;
 import org.pelayo.model.FotoPlanta;
+import org.pelayo.util.FlickrUtil;
+import org.pelayo.util.FlickrUtil.PhotoSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,6 +88,6 @@ public class FotosPlantasController extends BaseFotosController<FotoPlanta> {
 		if (result == null)
 			return randomFotoFlora(size);
 
-		return buildUrl(size, result);
+		return FlickrUtil.buildUrl(size, result);
 	}
 }

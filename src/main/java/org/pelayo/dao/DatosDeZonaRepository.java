@@ -54,8 +54,7 @@ public class DatosDeZonaRepository {
 		List<FotoResponse> results = jdbcTemplate.query(consulta, new RowMapper<FotoResponse>() {
 			@Override
 			public FotoResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				String temp = rs.getString("flickrUrl");
-				return new FotoResponse(temp, rs.getString("coment"));
+				return new FotoResponse(rs.getString("flickrUrl"), rs.getString("coment"));
 			}
 		});
 		return results;

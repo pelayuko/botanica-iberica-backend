@@ -1,49 +1,46 @@
 package org.pelayo.controller.model;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.pelayo.util.FlickrUtil;
+import org.pelayo.util.FlickrUtil.PhotoSize;
+
 public class FotoResponse {
 
-	public String fichero;
-	public String comentario;
-	public String utm;
-	public String thumbnail;
-	public String original;
-	public String descripcion;
-		
-	public FotoResponse(String fichero, String coment){
-		this.fichero = fichero;
-		this.comentario= coment;
-		String base = fichero.substring(0, fichero.lastIndexOf("."));
-		String ext = fichero.substring(fichero.lastIndexOf("."));
-		this.thumbnail=  base + "_m" + ext;
-		this.original= base + "_b" + ext;
-	}
-	
-	public FotoResponse(String fichero, String coment, String utm){
-		this(fichero, coment);
-		this.utm = utm;
+	private String comentario;
+	private String utm;
+	private final URL smallSquareURL;
+	private final URL small240URL;
+	private final URL thumbnailURL;
+	private final URL mediumURL;
+	private final URL originalURL;
+	private String descripcion;
+
+	public FotoResponse(String url, String coment) {
+		this.comentario = coment;
+
+		try {
+			this.smallSquareURL = FlickrUtil.buildUrl(PhotoSize.SMALL_SQUARE_75, url);
+			this.small240URL = FlickrUtil.buildUrl(PhotoSize.SMALL_240, url);
+			this.thumbnailURL = FlickrUtil.buildUrl(PhotoSize.THUMBNAIL, url);
+			this.mediumURL = FlickrUtil.buildUrl(PhotoSize.MEDIUM_800, url);
+			this.originalURL = FlickrUtil.buildUrl(PhotoSize.LARGE_1024, url);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("Unable to build url!", e);
+		}
 	}
 
-	public FotoResponse(String fichero, String coment, String utm, String descrip){
-		this(fichero, coment, utm);
+	public FotoResponse(String url, String coment, String utm) {
+		this(url, coment);
+		this.setUtm(utm);
+	}
+
+	public FotoResponse(String url, String coment, String utm, String descrip) {
+		this(url, coment, utm);
 		this.descripcion = descrip;
 	}
 
-	public String getfichero() {
-		return fichero;
-	}
-	
-	public String getthumbnail() {
-		return thumbnail;
-	}
-
-	public String getoriginal() {
-		return original;
-	}
-
-	public void setfichero(String fichero) {
-		this.fichero = fichero;
-	}
-	
 	public String getComentario() {
 		return comentario;
 	}
@@ -58,5 +55,33 @@ public class FotoResponse {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getUtm() {
+		return utm;
+	}
+
+	public void setUtm(String utm) {
+		this.utm = utm;
+	}
+
+	public URL getThumbnailURL() {
+		return thumbnailURL;
+	}
+
+	public URL getMediumURL() {
+		return mediumURL;
+	}
+
+	public URL getOriginalURL() {
+		return originalURL;
+	}
+
+	public URL getSmallSquareURL() {
+		return smallSquareURL;
+	}
+
+	public URL getSmall240URL() {
+		return small240URL;
 	}
 }
