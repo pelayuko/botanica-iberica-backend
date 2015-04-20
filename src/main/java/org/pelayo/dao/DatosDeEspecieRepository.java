@@ -119,7 +119,7 @@ public class DatosDeEspecieRepository {
 							lautm = "30T" + lautm;
 						}
 						String elsector = rs.getString("Sector");
-						elsector = Character.toString((char) (48 + (int) (elsector.charAt(0)) - 64));
+//						elsector = Character.toString((char) (48 + (int) (elsector.charAt(0)) - 64));
 						CitaResponse lacita = new CitaResponse(lautm, elsector);
 						String lazona = rs.getString("laZona");
 						lacita.setlaZona(lazona);

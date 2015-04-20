@@ -68,8 +68,9 @@ public class DatosDeZonaRepository {
 		} else if (zona.startsWith("Fuera")) {
 			comentario = "Fuera de la comarca";
 		} else if (zona.startsWith("Todo el sector")) {
-			String elsector = zona.substring(zona.length() - 1, zona.length());
-			comentario = jdbcTemplate.queryForObject("select Descrip from Sectores where Etiq = '" + elsector + "'",
+			String elsector = zona.substring(zona.indexOf('(') + 1, zona.length() - 1);
+			//String elsector = zona.substring(zona.length() - 1, zona.length());
+			comentario = jdbcTemplate.queryForObject("select Descrip from Sectores where Denom = '" + elsector + "'",
 					new RowMapper<String>() {
 						@Override
 						public String mapRow(ResultSet rs, int rowNum) throws SQLException {

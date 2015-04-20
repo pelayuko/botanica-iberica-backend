@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
 @Transactional(readOnly = true)
@@ -135,9 +134,9 @@ public class TaxonesRepository {
 		});
 	}
 	
-	public List<String> getNombreZonasBySector(String sector) {
-		String query = "select nombre from conszonas where Sector = '" + sector + "'";
-		return jdbcTemplate.query(query,
+	public List<String> getNombreZonasBySector(String etiqsector) {
+		String query = "select nombre from conszonas where Sector = '" + etiqsector + "'";
+		List<String> lista = jdbcTemplate.query(query,
 
 		new RowMapper<String>() {
 			@Override
@@ -145,6 +144,22 @@ public class TaxonesRepository {
 				return rs.getString("nombre");
 			}
 		});
+		
+		if (etiqsector.startsWith("Z")){
+			lista.add("Todos los sectores");
+			lista.add("Fuera de la comarca");
+		}
+		else{
+			String sector = jdbcTemplate.queryForObject("select denom from sectores where etiq = '" + etiqsector + "'",
+				new RowMapper<String>() {
+				@Override
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return rs.getString("denom");							
+					}
+			});
+			lista.add("Todo el sector (" + sector + ")");
+		}
+		return lista;
 	}
 
 	public List<SearchResponse> buscaNombreZonas(String zona) {

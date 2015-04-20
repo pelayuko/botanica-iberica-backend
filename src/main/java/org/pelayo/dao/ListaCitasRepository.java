@@ -18,11 +18,6 @@ public class ListaCitasRepository {
 
 	private static final Logger log = Logger.getLogger(ListaCitasRepository.class);
 
-	// FIXME: do it with query
-	static public String[][] SECTORES = { { "A", "La Muela" }, { "B", "Campo de Borja" }, { "C", "La Sierra" },
-			{ "D", "El Moncayo" }, { "E", "Somontano" }, { "F", "Magallón" }, { "G", "Tarazona" }, { "H", "Ágreda" },
-			{ "Z", "Otras" } };
-
 	// FIXME: simplify, hibernate, reuse, entities not views...
 
 	@Autowired
@@ -72,10 +67,13 @@ public class ListaCitasRepository {
 			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas where Sector= 'Z'";
 		} else if (zona.startsWith("Todo el sector")) {
 			String sector = zona.substring(zona.indexOf('(') + 1, zona.length() - 1);
-			for (String[] pair : SECTORES) {
-				if (pair[1].equals(sector))
-					etiq = pair[0];
-			}
+			etiq = jdbcTemplate.queryForObject("select etiq from sectores where denom = '" + sector + "'",
+				new RowMapper<String>() {
+				@Override
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return rs.getString("etiq");							
+					}
+			});
 			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas where Sector= '" + etiq + "'";
 		} else {
 			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas where laZona= '" + zona + "'";
@@ -114,7 +112,9 @@ public class ListaCitasRepository {
 	}
 	
 	private String convertSector(String elsector) {
-		return Character.toString((char) (48 + (int) (elsector.charAt(0)) - 64));
+		return elsector; 
+		// FIXME: creo que no hace falta para nada esta conversion...
+		//return Character.toString((char) (48 + (int) (elsector.charAt(0)) - 64));
 	}
 
 }
