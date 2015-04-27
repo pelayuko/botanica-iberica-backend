@@ -39,6 +39,14 @@ public class TaxonesTreeController {
 			prefix = "Fam. ";
 			leaves = taxonesTreeRepository.taxonLeafsByFamily(parent);
 			break;
+		case "subfamily":
+			prefix = "Subf. ";
+			leaves = taxonesTreeRepository.taxonLeafsBySubfamily(parent);
+			break;
+		case "tribu":
+			prefix = "Trib. ";
+			leaves = taxonesTreeRepository.taxonLeafsByTribu(parent);
+			break;
 		case "genus":
 			prefix = "Gén. ";
 			leaves = taxonesTreeRepository.taxonLeafsByGenus(parent);
@@ -73,6 +81,16 @@ public class TaxonesTreeController {
 	@RequestMapping("/listTaxonTreeByFamily")
 	public List<TaxonLeaf> listTaxonTreeByFamily(@RequestParam(value = "parent", required = true) String parent) {
 		return taxonesTreeRepository.taxonLeafsByFamily(parent);
+	}
+	
+	@RequestMapping("/listTaxonTreeBySubfamily")
+	public List<TaxonLeaf> listTaxonTreeBySubfamily(@RequestParam(value = "parent", required = true) String parent) {
+		return taxonesTreeRepository.taxonLeafsBySubfamily(parent);
+	}
+
+	@RequestMapping("/listTaxonTreeByTribu")
+	public List<TaxonLeaf> listTaxonTreeByTribu(@RequestParam(value = "parent", required = true) String parent) {
+		return taxonesTreeRepository.taxonLeafsByTribu(parent);
 	}
 
 	@RequestMapping("/listTaxonTreeByGenus")

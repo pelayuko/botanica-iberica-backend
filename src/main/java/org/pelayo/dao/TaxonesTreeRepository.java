@@ -31,23 +31,68 @@ public class TaxonesTreeRepository {
 	}
 
 	public List<TaxonLeaf> taxonLeafsByFamily(String parent) {
-		String query = "select NombreFam from Familias where GrupoFam = '" + parent + "'";
-		return jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
+		String query = "select NombreFam, consubfam from Familias where GrupoFam = '" + parent + "'";
+		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonLeaf(rs.getString("NombreFam"), "genus");
+				boolean flag = rs.getBoolean("consubfam");
+				return new TaxonLeaf(rs.getString("NombreFam"), flag?"subfamily":"genus");
 			}
 		});
+		return result;
 	}
-
+	
+	public List<TaxonLeaf> taxonLeafsBySubfamily(String parent) {
+		String query = "select SubFamilia from SubFamilias where Familia = '" + parent + "'";
+		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
+			@Override
+			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new TaxonLeaf(rs.getString("SubFamilia"), "tribu");
+			}
+		});
+		if (result.isEmpty()) result = taxonLeafsByGenus(parent); // no hay subfamilias (ni tribus, por tanto)
+		return result;
+	}
+	
+	public List<TaxonLeaf> taxonLeafsByTribu(String parent) {
+		String query = "select Tribu from Tribus where SubFamilia = '" + parent + "'";
+		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
+			@Override
+			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new TaxonLeaf(rs.getString("Tribu"), "genus");
+			}
+		});
+		if (result.isEmpty()) result = taxonLeafsByGenus(parent); // no hay tribus (pero si subfamilia)
+		return result;
+	}
+	
 	public List<TaxonLeaf> taxonLeafsByGenus(String parent) {
-		String query = "select NombreGen,Familia from Géneros where Familia = '" + parent + "' and not sinEspecies";
-		return jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
+		String query = "select NombreGen from Géneros where Tribu = '" + parent + "' and not sinEspecies";
+		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return new TaxonLeaf(rs.getString("NombreGen"), "species");
 			}
 		});
+		if (result.isEmpty()){
+			query = "select NombreGen from Géneros where Subfamilia = '" + parent + "' and not sinEspecies";
+			result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
+				@Override
+				public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return new TaxonLeaf(rs.getString("NombreGen"), "species");
+				}
+			});
+			if (result.isEmpty()){
+				query = "select NombreGen from Géneros where Familia = '" + parent + "' and not sinEspecies";
+				result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
+					@Override
+					public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return new TaxonLeaf(rs.getString("NombreGen"), "species");
+					}
+				});
+			}
+		}
+		return result;
 	}
 
 	public List<TaxonLeaf> taxonLeafsBySpecy(String parent) {
