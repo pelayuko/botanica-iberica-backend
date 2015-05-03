@@ -22,7 +22,7 @@ public class TaxonesRepository {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	
+
 	@Autowired
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
@@ -80,9 +80,8 @@ public class TaxonesRepository {
 
 	public List<SearchResponse> buscaNombreEspecie(String nombreEspecie, int limit, boolean starting) {
 		String param = (starting ? "'" : "'%") + nombreEspecie + "%'";
-		
-		final String query = "select elNombre from ConsEspecie where elNombre like" + param + " limit "
-				+ limit;
+
+		final String query = "select elNombre from ConsEspecie where elNombre like" + param + " limit " + limit;
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -110,14 +109,14 @@ public class TaxonesRepository {
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Género"), rs.getString("Familia"));
+				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Género"), rs
+						.getString("Familia"));
 			}
 		});
 	}
 
 	public List<SearchResponse> buscaNombreFamilia(String busquedaFamilia, int limit) {
-		String query = "select NombreFam from Familias where NombreFam like '" + busquedaFamilia
-				+ "%' limit " + limit;
+		String query = "select NombreFam from Familias where NombreFam like '" + busquedaFamilia + "%' limit " + limit;
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -137,7 +136,7 @@ public class TaxonesRepository {
 			}
 		});
 	}
-	
+
 	public List<String> getNombreZonasBySector(String etiqsector) {
 		String query = "select nombre from conszonas where Sector = '" + etiqsector + "'";
 		List<String> lista = jdbcTemplate.query(query,
@@ -148,19 +147,18 @@ public class TaxonesRepository {
 				return rs.getString("nombre");
 			}
 		});
-		
-		if (etiqsector.startsWith("Z")){
+
+		if (etiqsector.startsWith("Z")) {
 			lista.add("Todos los sectores");
 			lista.add("Fuera de la comarca");
-		}
-		else{
+		} else {
 			String sector = jdbcTemplate.queryForObject("select denom from sectores where etiq = '" + etiqsector + "'",
-				new RowMapper<String>() {
-				@Override
-				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-					return rs.getString("denom");							
-					}
-			});
+					new RowMapper<String>() {
+						@Override
+						public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+							return rs.getString("denom");
+						}
+					});
 			lista.add("Todo el sector (" + sector + ")");
 		}
 		return lista;
@@ -191,7 +189,9 @@ public class TaxonesRepository {
 		List<TaxonResponse> results = jdbcTemplate.query(consulta, new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), "", rs.getString("elNombre"), rs.getString("Familia"));
+				String nombre = rs.getString("elNombre");
+				return new TaxonResponse(nombre, "", nombre, rs.getString("Familia"), datosDeEspecieRepository
+						.getRandomFoto(nombre));
 			}
 		});
 		return results;
@@ -211,9 +211,9 @@ public class TaxonesRepository {
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 				String nombre = rs.getString("elNombre");
 				String genero = nombre.substring(0, nombre.indexOf(" "));
-				
+
 				FotoResponse randomFoto = datosDeEspecieRepository.getRandomFoto(nombre);
-				
+
 				return new TaxonResponse(nombre, "", genero, rs.getString("Familia"), randomFoto);
 			}
 		});
