@@ -205,7 +205,9 @@ public class TaxonesRepository {
 		List<TaxonResponse> results = jdbcTemplate.query(consulta, new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), "", rs.getString("elNombre"), rs.getString("Familia"));
+				String nombre = rs.getString("elNombre");
+				String genero = nombre.substring(0, nombre.indexOf(" "));
+				return new TaxonResponse(nombre, "", genero, rs.getString("Familia"));
 			}
 		});
 		return results;
