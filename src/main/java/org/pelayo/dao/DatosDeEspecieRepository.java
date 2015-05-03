@@ -133,8 +133,21 @@ public class DatosDeEspecieRepository {
 	}
 
 	public List<FotoResponse> getListFotos(String elTaxon) {
+		return getListFotos(elTaxon, 50);
+	}
+
+	public FotoResponse getRandomFoto(String elTaxon) {
+		List<FotoResponse> listFotos = getListFotos(elTaxon, 1);
+		if (listFotos.isEmpty()) {
+			return null;
+		}
+		
+		return listFotos.get(0);
+	}
+	
+	public List<FotoResponse> getListFotos(String elTaxon, int limit) {
 		String consulta = "select flickrUrl, denom, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM from consfotos join sectores on etiq=sector where elnombre = '"
-				+ elTaxon + "'";
+				+ elTaxon + "' order by RAND() limit " + limit;
 		List<FotoResponse> results = jdbcTemplate.query(consulta, 
 				new RowMapper<FotoResponse>() {
 					@Override

@@ -10,6 +10,8 @@ public class TaxonResponse {
 
 	private String familia;
 
+	private FotoResponse foto;
+
 	public TaxonResponse(String nombre, String nombrealt) {
 		this.nombre = nombre;
 		this.alternombre = nombrealt;
@@ -23,6 +25,11 @@ public class TaxonResponse {
 	public TaxonResponse(String nombre, String nombrealt, String genero, String familia) {
 		this(nombre, nombrealt, genero);
 		this.familia = familia;
+	}
+
+	public TaxonResponse(String nombre, String nombrealt, String genero, String familia, FotoResponse foto) {
+		this(nombre, nombrealt, genero, familia);
+		this.foto = foto;
 	}
 
 	public String getFamilia() {
@@ -55,5 +62,13 @@ public class TaxonResponse {
 
 	public void setAlternombre(String alternombre) {
 		this.alternombre = alternombre;
+	}
+
+	public FotoResponse getFoto() {
+		return foto;
+	}
+
+	public void setFoto(FotoResponse foto) {
+		this.foto = foto;
 	}
 }

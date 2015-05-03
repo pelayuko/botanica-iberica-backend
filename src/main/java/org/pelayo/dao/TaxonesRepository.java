@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.pelayo.controller.model.FotoResponse;
 import org.pelayo.controller.model.SearchResponse;
 import org.pelayo.controller.model.SearchResponse.SearchType;
 import org.pelayo.controller.model.TaxonResponse;
@@ -21,6 +22,9 @@ public class TaxonesRepository {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	DatosDeEspecieRepository datosDeEspecieRepository;
 
 	public List<TaxonResponse> taxonesByNombre(String nombre) {
 		String query = "select elNombre, nomaceptado from consinonimos where elNombre = '" + nombre + "'";
@@ -207,7 +211,10 @@ public class TaxonesRepository {
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 				String nombre = rs.getString("elNombre");
 				String genero = nombre.substring(0, nombre.indexOf(" "));
-				return new TaxonResponse(nombre, "", genero, rs.getString("Familia"));
+				
+				FotoResponse randomFoto = datosDeEspecieRepository.getRandomFoto(nombre);
+				
+				return new TaxonResponse(nombre, "", genero, rs.getString("Familia"), randomFoto);
 			}
 		});
 		return results;
