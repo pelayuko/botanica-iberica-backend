@@ -2,26 +2,21 @@ package org.pelayo.controller.model;
 
 public class TaxonResponse {
 
-	private String nombre; //nombre aceptado
+	private String nombre; // nombre aceptado
 
-	private String alternombre; //nombre común, sinónimo, etc
+	private String alternombre; // nombre común, sinónimo, etc
 
 	private String genero;
 
 	private String familia;
 
-	public TaxonResponse(String nombre) {
-		this.nombre = nombre;
-	}
-
 	public TaxonResponse(String nombre, String nombrealt) {
 		this.nombre = nombre;
-		this.setAlternombre(nombrealt);
+		this.alternombre = nombrealt;
 	}
-	
+
 	public TaxonResponse(String nombre, String nombrealt, String genero) {
-		this.nombre = nombre;
-		this.setAlternombre(nombrealt);
+		this(nombre, nombrealt);
 		this.genero = genero;
 	}
 
