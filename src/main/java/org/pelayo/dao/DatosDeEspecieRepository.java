@@ -11,7 +11,9 @@ import org.pelayo.controller.model.CitaResponse;
 import org.pelayo.controller.model.FotoResponse;
 import org.pelayo.controller.model.InfoTaxonResponse;
 import org.pelayo.controller.model.TaxonResponse;
+import org.pelayo.model.Especie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -43,18 +45,40 @@ public class DatosDeEspecieRepository {
 				});
 		String comparator = prev ? " < " : " > ";
 		String result = "";
-		result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
-				+ "' and not foranea order by idPirineos " + (prev ? "desc" : "asc" ) + " limit 1", new RowMapper<String>() {
+		String consulta = "select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
+				+ "' and not foranea";
+		if (!Especie.filtro.isEmpty()) consulta += Especie.filtro;
+		consulta += " order by idPirineos " + (prev ? "desc" : "asc" ) + " limit 1";
+		try {
+		result = jdbcTemplate.queryForObject(consulta, new RowMapper<String>() {
 			@Override
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return rs.getString("elNombre");
 			}
 		});
+		} catch (EmptyResultDataAccessException e) {
+			result = "";
+		}
+		if (result.isEmpty()) {
+			if (prev) idPirineos = "9999";
+			else idPirineos = "0000";
+			consulta = "select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
+					+ "' and not foranea";
+			if (!Especie.filtro.isEmpty()) consulta += Especie.filtro;
+			consulta += " order by idPirineos " + (prev ? "desc" : "asc" ) + " limit 1";
+			
+			result = jdbcTemplate.queryForObject(consulta, new RowMapper<String>() {
+				@Override
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return rs.getString("elNombre");
+				}
+			});
+		}
 		return result;
 	}
 
 	public String taxonAlAzar() {
-		String result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where not foranea order by RAND() limit 1",
+		String result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where not foranea" + Especie.filtro +" order by RAND() limit 1",
 				new RowMapper<String>() {
 			@Override
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {

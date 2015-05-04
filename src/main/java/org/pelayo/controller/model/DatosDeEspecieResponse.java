@@ -2,6 +2,8 @@ package org.pelayo.controller.model;
 
 import java.util.List;
 
+import org.pelayo.model.Especie;
+
 public class DatosDeEspecieResponse {
 
 	private String IdentTaxon;
@@ -9,6 +11,8 @@ public class DatosDeEspecieResponse {
 	private String genero;
 
 	private String familia;
+
+	private String filtro;
 
 	private TaxonResponse DatosTaxon;
 
@@ -93,5 +97,12 @@ public class DatosDeEspecieResponse {
 	public void setFamilia(String familia) {
 		this.familia = familia;
 	}
+	
+	public void setFiltro() {
+		this.filtro = Especie.filtro;
+	}
 
+	public String getFiltro() {
+		return filtro;
+	}
 }

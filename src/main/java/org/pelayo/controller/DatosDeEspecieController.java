@@ -3,6 +3,7 @@ package org.pelayo.controller;
 import org.apache.log4j.Logger;
 import org.pelayo.controller.model.DatosDeEspecieResponse;
 import org.pelayo.dao.DatosDeEspecieRepository;
+import org.pelayo.model.Especie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ public class DatosDeEspecieController {
 
 	@RequestMapping("/datosDeEspecieRandom")
 	public DatosDeEspecieResponse datosDeEspecieRandom() {
+//		Especie.filtro="";
 		return getDatosEspecie(repo.taxonAlAzar());
 	}
 
@@ -33,6 +35,7 @@ public class DatosDeEspecieController {
 
 	@RequestMapping("/datosDeEspecie")
 	public DatosDeEspecieResponse datosDeEspecie(@RequestParam(value = "ident", required = true) String ident) {
+		Especie.filtro="";
 		return getDatosEspecie(ident);
 	}
 
@@ -46,6 +49,7 @@ public class DatosDeEspecieController {
 		response.setSinonimos(repo.getListSinonimos(ident));
 		response.setComunes(repo.getListComunes(ident));
 		response.setInfo(repo.leeInfo(ident));
+		response.setFiltro();
 		return response;
 	}
 
