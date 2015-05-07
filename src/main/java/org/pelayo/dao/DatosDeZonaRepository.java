@@ -91,14 +91,15 @@ public class DatosDeZonaRepository {
 	}
 
 	public List<FotoResponse> fotosDeZonaAlAzar(int limit) {
-		String consulta = "select flickrUrl, Sector, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM from consfotoslugares order by rand() limit " + limit;
+		String consulta = "select flickrUrl, Sector, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM, zonas.nombre "
+				+ "from consfotoslugares join zonas on consfotoslugares.zona = zonas.id order by rand() limit " + limit;
 		List<FotoResponse> results = jdbcTemplate.query(consulta, 
 				new RowMapper<FotoResponse>() {
 					@Override
 					public FotoResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 						String temp = rs.getString("flickrUrl");
 						return new FotoResponse(temp, rs.getString("coment"), rs.getString("UTM"), "Sector "
-								+ rs.getString("Sector"));
+								+ rs.getString("Sector"), rs.getString("zonas.nombre"));
 					}
 				});
 		return results;

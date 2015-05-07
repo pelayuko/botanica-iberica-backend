@@ -28,7 +28,7 @@ public class DatosDeGeneroRepository {
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
 	public List<TaxonResponse> getTaxonesByGenero(final String genero) {
-		String query = "select identEsp,Género,elNombre, Familia from ConsEspecie where Género = '" + genero + "'";
+		String query = "select identEsp,Género,elNombre, Familia from ConsEspecie where Género = '" + genero + "' order by idPirineos";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {
@@ -42,7 +42,7 @@ public class DatosDeGeneroRepository {
 
 	public List<FotoResponse> getListFotos(String genero, int limit) {
 		String consulta = "select flickrUrl, elNombre, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM from consfotos where elNombre like '"
-				+ genero + "%' order by rand() limit " + limit;
+				+ genero + " %' order by rand() limit " + limit;
 		List<FotoResponse> results = jdbcTemplate.query(consulta, new RowMapper<FotoResponse>() {
 			@Override
 			public FotoResponse mapRow(ResultSet rs, int rowNum) throws SQLException {

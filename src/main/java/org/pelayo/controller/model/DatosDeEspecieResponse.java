@@ -7,11 +7,12 @@ import org.pelayo.model.Especie;
 public class DatosDeEspecieResponse {
 
 	private String IdentTaxon;
+	
+/*
+	private String genero; // no se usa, se usa el de DatosTxon
 
-	private String genero;
-
-	private String familia;
-
+	private String familia; // no se usa, se usa el de DatosTxon
+*/
 	private String filtro;
 
 	private TaxonResponse DatosTaxon;
@@ -81,7 +82,8 @@ public class DatosDeEspecieResponse {
 	public void setInfo(InfoTaxonResponse info) {
 		this.info = info;
 	}
-
+	
+/*
 	public String getGenero() {
 		return genero;
 	}
@@ -96,10 +98,12 @@ public class DatosDeEspecieResponse {
 
 	public void setFamilia(String familia) {
 		this.familia = familia;
-	}
+	}*/
 	
 	public void setFiltro() {
-		this.filtro = Especie.filtro;
+		if (Especie.filtro.startsWith(" and G")) this.filtro = "genero";
+		else if (Especie.filtro.startsWith(" and F")) this.filtro = "familia";
+		else this.filtro = "";
 	}
 
 	public String getFiltro() {

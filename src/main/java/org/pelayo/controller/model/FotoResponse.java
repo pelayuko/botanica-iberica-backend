@@ -10,6 +10,7 @@ public class FotoResponse {
 
 	private String comentario;
 	private String utm;
+	private String zona;
 	private final URL smallSquareURL;
 	private final URL small240URL;
 	private final URL thumbnailURL;
@@ -39,6 +40,11 @@ public class FotoResponse {
 	public FotoResponse(String url, String coment, String utm, String descrip) {
 		this(url, coment, utm);
 		this.descripcion = descrip;
+	}
+	
+	public FotoResponse(String url, String coment, String utm, String descrip, String zona) {
+		this(url, coment, utm, descrip);
+		this.setZona(zona);
 	}
 
 	public String getComentario() {
@@ -83,5 +89,13 @@ public class FotoResponse {
 
 	public URL getSmall240URL() {
 		return small240URL;
+	}
+
+	public String getZona() {
+		return zona;
+	}
+
+	public void setZona(String zona) {
+		this.zona = zona;
 	}
 }

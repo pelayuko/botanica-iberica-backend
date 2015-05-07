@@ -14,8 +14,15 @@ public class FiltrosController {
 	private TaxonesRepository repo;
 
 	@RequestMapping("/filtroByFamilia")
-	public String zonasBySector(@RequestParam(value = "familia", required = true) String familia) {
-		if (Especie.filtro.isEmpty()) Especie.filtro = " and Familia = '"+ familia + "'";
+	public String filtroByFamilia(@RequestParam(value = "familia", required = true) String familia) {
+		if (Especie.filtro.isEmpty() || Especie.filtro.startsWith(" and G")) Especie.filtro = " and Familia = '"+ familia + "'";
+		else Especie.filtro = "";
+		return Especie.filtro;
+	}
+	
+	@RequestMapping("/filtroByGenero")
+	public String filtroByGenero(@RequestParam(value = "genero", required = true) String genero) {
+		if (Especie.filtro.isEmpty() || Especie.filtro.startsWith(" and F")) Especie.filtro = " and Género = '"+ genero + "'";
 		else Especie.filtro = "";
 		return Especie.filtro;
 	}
