@@ -5,10 +5,12 @@ import org.pelayo.controller.model.DatosDeEspecieResponse;
 import org.pelayo.dao.DatosDeEspecieRepository;
 import org.pelayo.model.Especie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Controller
 @RestController
 public class DatosDeEspecieController {
 	
@@ -18,24 +20,25 @@ public class DatosDeEspecieController {
 	private DatosDeEspecieRepository repo;
 
 	@RequestMapping("/datosDeEspecieRandom")
-	public DatosDeEspecieResponse datosDeEspecieRandom() {
-//		Especie.filtro="";
-		return getDatosEspecie(repo.taxonAlAzar());
+	public DatosDeEspecieResponse datosDeEspecieRandom(@RequestParam(value = "filtro", required = true) String filtro) {
+		if (filtro.isEmpty()) filtro="";
+		return getDatosEspecie(repo.taxonAlAzar(filtro));
 	}
 
 	@RequestMapping("/datosDeEspecieNext")
-	public DatosDeEspecieResponse datosDeEspecieNext(@RequestParam(value = "ident", required = true) String ident) {
-		return getDatosEspecie(repo.relativeTaxon(ident, false));
+	public DatosDeEspecieResponse datosDeEspecieNext(@RequestParam(value = "ident", required = true) String ident,
+			@RequestParam(value = "filtro", required = true) String filtro) {
+		return getDatosEspecie(repo.relativeTaxon(ident, false, filtro));
 	}
 
 	@RequestMapping("/datosDeEspeciePrev")
-	public DatosDeEspecieResponse datosDeEspeciePrev(@RequestParam(value = "ident", required = true) String ident) {
-		return getDatosEspecie(repo.relativeTaxon(ident, true));
+	public DatosDeEspecieResponse datosDeEspeciePrev(@RequestParam(value = "ident", required = true) String ident,
+			@RequestParam(value = "filtro", required = true) String filtro) {
+		return getDatosEspecie(repo.relativeTaxon(ident, true, filtro));
 	}
 
 	@RequestMapping("/datosDeEspecie")
 	public DatosDeEspecieResponse datosDeEspecie(@RequestParam(value = "ident", required = true) String ident) {
-		Especie.filtro="";
 		return getDatosEspecie(ident);
 	}
 
@@ -49,7 +52,6 @@ public class DatosDeEspecieController {
 		response.setSinonimos(repo.getListSinonimos(ident));
 		response.setComunes(repo.getListComunes(ident));
 		response.setInfo(repo.leeInfo(ident));
-		response.setFiltro();
 		return response;
 	}
 

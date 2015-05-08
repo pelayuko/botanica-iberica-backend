@@ -30,7 +30,7 @@ public class DatosDeEspecieRepository {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	public String relativeTaxon(String actual, boolean prev) {
+	public String relativeTaxon(String actual, boolean prev, String filtro) {
 		String idPirineos = "";
 		try {
 			actual = URLDecoder.decode(actual, "UTF-8");
@@ -46,8 +46,7 @@ public class DatosDeEspecieRepository {
 		String comparator = prev ? " < " : " > ";
 		String result = "";
 		String consulta = "select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
-				+ "' and not foranea";
-		if (!Especie.filtro.isEmpty()) consulta += Especie.filtro;
+				+ "' and not foranea" + filtro;
 		consulta += " order by idPirineos " + (prev ? "desc" : "asc" ) + " limit 1";
 		try {
 		result = jdbcTemplate.queryForObject(consulta, new RowMapper<String>() {
@@ -63,8 +62,7 @@ public class DatosDeEspecieRepository {
 			if (prev) idPirineos = "9999";
 			else idPirineos = "0000";
 			consulta = "select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
-					+ "' and not foranea";
-			if (!Especie.filtro.isEmpty()) consulta += Especie.filtro;
+					+ "' and not foranea" + filtro;
 			consulta += " order by idPirineos " + (prev ? "desc" : "asc" ) + " limit 1";
 			
 			result = jdbcTemplate.queryForObject(consulta, new RowMapper<String>() {
@@ -77,8 +75,8 @@ public class DatosDeEspecieRepository {
 		return result;
 	}
 
-	public String taxonAlAzar() {
-		String result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where not foranea" + Especie.filtro +" order by RAND() limit 1",
+	public String taxonAlAzar(String filtro) {
+		String result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where not foranea" + filtro +" order by RAND() limit 1",
 				new RowMapper<String>() {
 			@Override
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {

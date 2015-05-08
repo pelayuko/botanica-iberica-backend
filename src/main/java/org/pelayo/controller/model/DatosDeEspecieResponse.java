@@ -8,13 +8,6 @@ public class DatosDeEspecieResponse {
 
 	private String IdentTaxon;
 	
-/*
-	private String genero; // no se usa, se usa el de DatosTxon
-
-	private String familia; // no se usa, se usa el de DatosTxon
-*/
-	private String filtro;
-
 	private TaxonResponse DatosTaxon;
 
 	private List<CitaResponse> citas;
@@ -83,30 +76,4 @@ public class DatosDeEspecieResponse {
 		this.info = info;
 	}
 	
-/*
-	public String getGenero() {
-		return genero;
-	}
-
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
-
-	public String getFamilia() {
-		return familia;
-	}
-
-	public void setFamilia(String familia) {
-		this.familia = familia;
-	}*/
-	
-	public void setFiltro() {
-		if (Especie.filtro.startsWith(" and G")) this.filtro = "genero";
-		else if (Especie.filtro.startsWith(" and F")) this.filtro = "familia";
-		else this.filtro = "";
-	}
-
-	public String getFiltro() {
-		return filtro;
-	}
 }

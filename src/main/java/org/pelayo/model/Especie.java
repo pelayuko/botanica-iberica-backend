@@ -19,8 +19,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Especie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static String filtro = "";
-
 	@Id
 	private Integer identEsp;
 
