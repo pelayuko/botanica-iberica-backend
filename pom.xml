@@ -57,11 +57,6 @@
 			<version>2.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.imgscalr</groupId>
-			<artifactId>imgscalr-lib</artifactId>
-			<version>4.2</version>
-		</dependency>
-		<dependency>
 			<groupId>com.flickr4java</groupId>
 			<artifactId>flickr4java</artifactId>
 <!-- 			<version>2.14-SNAPSHOT</version> -->
