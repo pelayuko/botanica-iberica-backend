@@ -64,7 +64,8 @@
 		<dependency>
 			<groupId>com.flickr4java</groupId>
 			<artifactId>flickr4java</artifactId>
-			<version>2.14-SNAPSHOT</version>
+<!-- 			<version>2.14-SNAPSHOT</version> -->
+			<version>2.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jscience</groupId>

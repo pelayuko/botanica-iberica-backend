@@ -253,8 +253,8 @@ public class PhotoUploader extends AbstractAuthorizedBaseCommand<Photo, PhotoUpl
 		if (model.getGeoData() != null) {
 			GeoData geoData = new GeoData();
 			{
-				geoData.setLatitude(model.getGeoData().getLat());
-				geoData.setLongitude(model.getGeoData().getLng());
+				geoData.setLatitude((float) model.getGeoData().getLat());
+				geoData.setLongitude((float) model.getGeoData().getLng());
 				geoData.setAccuracy(Flickr.ACCURACY_STREET);
 			}
 
