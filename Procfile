@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/botanica-backend-0.0.1-SNAPSHOT.war
+web: java -Dserver.port=$PORT -jar target/botanica-backend-0.0.1-SNAPSHOT.war --spring.profiles.active=prod
