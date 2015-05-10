@@ -20,7 +20,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>demo.BotanicaBackendApplication</start-class>
+		<start-class>org.pelayo.BotanicaBackendApplication</start-class>
 		<java.version>1.7</java.version>
 	</properties>
 
