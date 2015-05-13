@@ -9,6 +9,9 @@ public class TaxonResponse {
 	private String genero;
 
 	private String familia;
+	private String fitotipo;
+	private String fitosubtipo;
+	private String colorflor;
 
 	private FotoResponse foto;
 
@@ -70,5 +73,29 @@ public class TaxonResponse {
 
 	public void setFoto(FotoResponse foto) {
 		this.foto = foto;
+	}
+
+	public String getFitotipo() {
+		return fitotipo;
+	}
+
+	public void setFitotipo(String fitotipo) {
+		this.fitotipo = fitotipo;
+	}
+
+	public String getFitosubtipo() {
+		return fitosubtipo;
+	}
+
+	public void setFitosubtipo(String fitosubtipo) {
+		this.fitosubtipo = fitosubtipo;
+	}
+
+	public String getColorflor() {
+		return colorflor;
+	}
+
+	public void setColorflor(String colorflor) {
+		this.colorflor = colorflor;
 	}
 }

@@ -26,10 +26,10 @@ public class DatosDeZonaRepository {
 	public List<FotoResponse> getListFotos(String zona, String sector) {
 		String consulta;
 		if (zona.startsWith("Todos los sectores")) {
-			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment from consfotoslugares order by rand() limit 15";
+			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment, UTM from consfotoslugares order by rand() limit 15";
 
 		} else if (zona.startsWith("Todo el sector") || zona.startsWith("Fuera")) {
-			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment from consfotoslugares join sectores on etiq=Sector where Sector= '"
+			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment, UTM from consfotoslugares join sectores on etiq=Sector where Sector= '"
 					+ sector + "' order by rand() limit 15";
 		} else {
 
@@ -41,7 +41,7 @@ public class DatosDeZonaRepository {
 						}
 					});
 
-			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment from consfotoslugares "
+			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment, UTM from consfotoslugares "
 					+ "join sectores on etiq=Sector where Zona = '" + idzona + "'"; // hace
 																					// falta
 																					// el
@@ -54,7 +54,7 @@ public class DatosDeZonaRepository {
 		List<FotoResponse> results = jdbcTemplate.query(consulta, new RowMapper<FotoResponse>() {
 			@Override
 			public FotoResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new FotoResponse(rs.getString("flickrUrl"), rs.getString("coment"));
+				return new FotoResponse(rs.getString("flickrUrl"), rs.getString("coment"), rs.getString("UTM"));
 			}
 		});
 		return results;

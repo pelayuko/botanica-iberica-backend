@@ -179,19 +179,26 @@ public class TaxonesRepository {
 	public List<TaxonResponse> taxonesByZona(String zona, String sector) {
 		String consulta;
 		if (zona.startsWith("Todos los sectores")) {
-			consulta = "select distinct elNombre, Familia from conscitas";
+			consulta = "select distinct elNombre, Familia, fitotipo, fitosubtipo, color from conscitas "
+					+ "join especies on conscitas.idpirineos = especies.idpirineos";
 		} else if (zona.startsWith("Todo el sector") || zona.startsWith("Fuera")) {
 			// elsector=lazona.substring(lazona.length()-1, lazona.length());
-			consulta = "select distinct elNombre, Familia from conscitas where Sector= '" + sector + "'";
+			consulta = "select distinct elNombre, Familia, fitotipo, fitosubtipo, color from conscitas "
+					+ "join especies on conscitas.idpirineos = especies.idpirineos where Sector= '" + sector + "'";
 		} else {
-			consulta = "select distinct elNombre, Familia from conscitas where laZona= '" + zona + "'";
+			consulta = "select distinct elNombre, Familia, fitotipo, fitosubtipo, color from conscitas "
+					+ "join especies on conscitas.idpirineos = especies.idpirineos where laZona= '" + zona + "'";
 		}
 		List<TaxonResponse> results = jdbcTemplate.query(consulta, new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 				String nombre = rs.getString("elNombre");
-				return new TaxonResponse(nombre, "", nombre, rs.getString("Familia"), datosDeEspecieRepository
+				TaxonResponse elTaxon = new TaxonResponse(nombre, "", nombre, rs.getString("Familia"), datosDeEspecieRepository
 						.getRandomFoto(nombre));
+				elTaxon.setFitotipo(rs.getString("fitotipo"));
+				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
+				elTaxon.setColorflor(rs.getString("color"));
+				return elTaxon;
 			}
 		});
 		return results;
@@ -219,4 +226,5 @@ public class TaxonesRepository {
 		});
 		return results;
 	}
+	
 }

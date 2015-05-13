@@ -31,15 +31,19 @@ public class DatosDeFamiliaRepository {
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
 	public List<TaxonResponse> getTaxonesByFamilia(String familia) {
-		String query = "select identEsp, Género, elNombre, Familia from ConsEspecie where Familia = '" + familia + "' order by idPirineos";
+		String query = "select identEsp, Género, elNombre, Familia, fitotipo, fitosubtipo, color from ConsEspecie where Familia = '" + familia + "' order by idPirineos";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 				String nombre = rs.getString("elNombre");
-				return new TaxonResponse(nombre, "", rs.getString("Género"), rs.getString("Familia"),
+				TaxonResponse elTaxon = new TaxonResponse(nombre, "", rs.getString("Género"), rs.getString("Familia"),
 						datosDeEspecieRepository.getRandomFoto(nombre));
+				elTaxon.setFitotipo(rs.getString("fitotipo"));
+				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
+				elTaxon.setColorflor(rs.getString("color"));
+				return elTaxon;
 			}
 		});
 	}
