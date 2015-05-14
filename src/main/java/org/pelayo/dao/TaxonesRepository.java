@@ -208,10 +208,12 @@ public class TaxonesRepository {
 		String consulta, lautm;
 		if (utm.length() == 7) {
 			lautm = utm.substring(3, 6) + "_" + utm.substring(6) + "_";
-			consulta = "select distinct elNombre, Familia from conscitas where Coord like '" + lautm + "'";
+			consulta = "select distinct elNombre, Familia, fitotipo, fitosubtipo, color from conscitas "
+					+ "join especies on conscitas.idpirineos = especies.idpirineos where Coord like '" + lautm + "'";
 		} else {
 			lautm = utm.substring(3);
-			consulta = "select distinct elNombre, Familia from conscitas where Coord = '" + lautm + "'";
+			consulta = "select distinct elNombre, Familia, fitotipo, fitosubtipo, color from conscitas "
+					+ "join especies on conscitas.idpirineos = especies.idpirineos where Coord = '" + lautm + "'";
 		}
 		List<TaxonResponse> results = jdbcTemplate.query(consulta, new RowMapper<TaxonResponse>() {
 			@Override
@@ -221,7 +223,11 @@ public class TaxonesRepository {
 
 				FotoResponse randomFoto = datosDeEspecieRepository.getRandomFoto(nombre);
 
-				return new TaxonResponse(nombre, "", genero, rs.getString("Familia"), randomFoto);
+				TaxonResponse elTaxon = new TaxonResponse(nombre, "", genero, rs.getString("Familia"), randomFoto);
+				elTaxon.setFitotipo(rs.getString("fitotipo"));
+				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
+				elTaxon.setColorflor(rs.getString("color"));
+				return elTaxon;
 			}
 		});
 		return results;
