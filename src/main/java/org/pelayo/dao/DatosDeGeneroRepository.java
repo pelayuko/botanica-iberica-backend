@@ -28,14 +28,18 @@ public class DatosDeGeneroRepository {
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
 	public List<TaxonResponse> getTaxonesByGenero(final String genero) {
-		String query = "select identEsp,Género,elNombre, Familia from ConsEspecie where Género = '" + genero + "' order by idPirineos";
+		String query = "select identEsp,Género,elNombre, Familia, fitotipo, fitosubtipo, color from ConsEspecie where Género = '" + genero + "' order by idPirineos";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 				FotoResponse randomFoto = datosDeEspecieRepository.getRandomFoto(rs.getString("elNombre"));
-				return new TaxonResponse(rs.getString("elNombre"), "", genero, rs.getString("Familia"), randomFoto);
+				TaxonResponse elTaxon = new TaxonResponse(rs.getString("elNombre"), "", genero, rs.getString("Familia"), randomFoto);
+				elTaxon.setFitotipo(rs.getString("fitotipo"));
+				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
+				elTaxon.setColorflor(rs.getString("color"));
+				return elTaxon;
 			}
 		});
 	}
