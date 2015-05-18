@@ -32,7 +32,7 @@ public class DatosDeUtmController {
 		resp.setEspecies(repo.taxonesByUTM(utm));
 		String sector = "-"; // para UTMs10x10
 		if (utm.length() == 9) {
-			String query = "select sectores.denom as elSector from utmsectores join sectores on sectores.etiq = utmsectores.sector where utm = '"
+			String query = "select sectores.denom as elSector from UtmSectores join sectores on sectores.etiq = utmsectores.sector where utm = '"
 						+ utm.substring(3) +"' limit 1";
 			sector = jdbcTemplate.queryForObject(query,
 					new RowMapper<String>() {
