@@ -28,7 +28,7 @@ public class DatosDeGeneroRepository {
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
 	public List<TaxonResponse> getTaxonesByGenero(final String genero) {
-		String query = "select identEsp,Género,elNombre, Familia, fitotipo, fitosubtipo, color from ConsEspecie where Género = '" + genero + "' order by idPirineos";
+		String query = "select identEsp,Género,elNombre, Familia, fitotipo, fitosubtipo, color from consespecie where Género = '" + genero + "' order by idPirineos";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {

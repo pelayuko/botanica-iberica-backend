@@ -37,7 +37,7 @@ public class DatosDeEspecieRepository {
 		} catch (UnsupportedEncodingException e) {
 		}
 		idPirineos = jdbcTemplate.queryForObject(
-				"select idPirineos from ConsEspecie where elNombre = '" + actual + "'", new RowMapper<String>() {
+				"select idPirineos from consespecie where elNombre = '" + actual + "'", new RowMapper<String>() {
 					@Override
 					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 						return rs.getString("idPirineos");
@@ -45,7 +45,7 @@ public class DatosDeEspecieRepository {
 				});
 		String comparator = prev ? " < " : " > ";
 		String result = "";
-		String consulta = "select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
+		String consulta = "select elNombre from consespecie where idPirineos " + comparator + "'" + idPirineos
 				+ "' and not foranea" + filtro;
 		consulta += " order by idPirineos " + (prev ? "desc" : "asc") + " limit 1";
 		try {
@@ -63,7 +63,7 @@ public class DatosDeEspecieRepository {
 				idPirineos = "9999";
 			else
 				idPirineos = "0000";
-			consulta = "select elNombre from ConsEspecie where idPirineos " + comparator + "'" + idPirineos
+			consulta = "select elNombre from consespecie where idPirineos " + comparator + "'" + idPirineos
 					+ "' and not foranea" + filtro;
 			consulta += " order by idPirineos " + (prev ? "desc" : "asc") + " limit 1";
 
@@ -78,7 +78,7 @@ public class DatosDeEspecieRepository {
 	}
 
 	public String taxonAlAzar(String filtro) {
-		String result = jdbcTemplate.queryForObject("select elNombre from ConsEspecie where not foranea" + filtro
+		String result = jdbcTemplate.queryForObject("select elNombre from consespecie where not foranea" + filtro
 				+ " order by RAND() limit 1", new RowMapper<String>() {
 			@Override
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -90,7 +90,7 @@ public class DatosDeEspecieRepository {
 
 	public InfoTaxonResponse leeInfo(final String ident) {
 
-		String query = "select *, FT.tipo as fitoTipoNombre, FST.Subtipo as fitoSubtipoNombre from ConsEspecie C, fitotipos FT, fitosubtipos FST "
+		String query = "select *, FT.tipo as fitoTipoNombre, FST.Subtipo as fitoSubtipoNombre from consespecie C, fitotipos FT, fitosubtipos FST "
 				+ " where C.elNombre = '" + ident + "' and C.fitoTipo = FT.Abrev and C.fitoSubtipo = FST.Abrev ";
 		List<InfoTaxonResponse> resultado = jdbcTemplate.query(query, new RowMapper<InfoTaxonResponse>() {
 			@Override
@@ -110,7 +110,7 @@ public class DatosDeEspecieRepository {
 	}
 
 	public TaxonResponse leeDatosTaxon(final String ident) {
-		String prueba = "select losAutores, Género, Familia from ConsEspecie where elNombre = '" + ident + "'";
+		String prueba = "select losAutores, Género, Familia from consespecie where elNombre = '" + ident + "'";
 		TaxonResponse result = jdbcTemplate.queryForObject(prueba,
 
 		new RowMapper<TaxonResponse>() {
@@ -123,7 +123,7 @@ public class DatosDeEspecieRepository {
 	}
 
 	public List<CitaResponse> getList(String elTaxon) {
-		String consulta = "select ifnull(Coord,'-') as coord, Sector, laZona, Fecha, Lugar from consCitas where elNombre= '"
+		String consulta = "select ifnull(Coord,'-') as coord, Sector, laZona, Fecha, Lugar from conscitas where elNombre= '"
 				+ elTaxon + "'";
 		List<CitaResponse> results = jdbcTemplate.query(consulta,
 

@@ -31,7 +31,7 @@ public class DatosDeFamiliaRepository {
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
 	public List<TaxonResponse> getTaxonesByFamilia(String familia) {
-		String query = "select identEsp, Género, elNombre, Familia, fitotipo, fitosubtipo, color from ConsEspecie where Familia = '" + familia + "' order by idPirineos";
+		String query = "select identEsp, Género, elNombre, Familia, fitotipo, fitosubtipo, color from consespecie where Familia = '" + familia + "' order by idPirineos";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {

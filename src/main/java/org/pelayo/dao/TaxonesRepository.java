@@ -81,7 +81,7 @@ public class TaxonesRepository {
 	public List<SearchResponse> buscaNombreEspecie(String nombreEspecie, int limit, boolean starting) {
 		String param = (starting ? "'" : "'%") + nombreEspecie + "%'";
 
-		final String query = "select elNombre from ConsEspecie where elNombre like" + param + " limit " + limit;
+		final String query = "select elNombre from consespecie where elNombre like" + param + " limit " + limit;
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -103,7 +103,7 @@ public class TaxonesRepository {
 	}
 
 	public List<TaxonResponse> getTaxonesByGenero(String genero) {
-		String query = "select identEsp,Género,elNombre, Familia from ConsEspecie where Género = '" + genero + "'";
+		String query = "select identEsp,Género,elNombre, Familia from consespecie where Género = '" + genero + "'";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {
@@ -126,7 +126,7 @@ public class TaxonesRepository {
 	}
 
 	public List<TaxonResponse> getTaxonesByFamilia(String familia) {
-		String query = "select identEsp,Género,elNombre, Familia from ConsEspecie where Familia = '" + familia + "'";
+		String query = "select identEsp,Género,elNombre, Familia from consespecie where Familia = '" + familia + "'";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {

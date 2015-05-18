@@ -96,7 +96,7 @@ public class TaxonesTreeRepository {
 	}
 
 	public List<TaxonLeaf> taxonLeafsBySpecy(String parent) {
-		String query = "select identEsp,Género,elNombre from ConsEspecie where Género = '" + parent + "'";
+		String query = "select identEsp,Género,elNombre from consespecie where Género = '" + parent + "'";
 		return jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {

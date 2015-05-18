@@ -24,7 +24,7 @@ public class ListaCitasRepository {
 	JdbcTemplate jdbcTemplate;
 
 	public List<CitaResponse> listaCitasByUtmsTaxon(String taxon) {
-		String consulta = "select ifnull(Coord,'-') as coord, Sector from consCitas where elNombre= '" + taxon + "'";
+		String consulta = "select ifnull(Coord,'-') as coord, Sector from conscitas where elNombre= '" + taxon + "'";
 		return jdbcTemplate.query(consulta, new RowMapper<CitaResponse>() {
 			@Override
 			public CitaResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -40,7 +40,7 @@ public class ListaCitasRepository {
 	}
 	
 	public List<CitaResponse> listaCitasJacaByUtmsTaxon(String taxon) {
-		String consulta = "select idJaca from ConsEspecie where elNombre = '" + taxon + "'";
+		String consulta = "select idJaca from consespecie where elNombre = '" + taxon + "'";
 		String codigo =
 		jdbcTemplate.queryForObject(consulta, new RowMapper<String>() {
 			@Override
@@ -62,9 +62,9 @@ public class ListaCitasRepository {
 		String etiq = "", consulta;
 
 		if (zona.startsWith("Todos los sectores")) {
-			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas"; // todas
+			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from conscitas"; // todas
 		} else if (zona.startsWith("Fuera")) {
-			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas where Sector= 'Z'";
+			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from conscitas where Sector= 'Z'";
 		} else if (zona.startsWith("Todo el sector")) {
 			String sector = zona.substring(zona.indexOf('(') + 1, zona.length() - 1);
 			etiq = jdbcTemplate.queryForObject("select etiq from sectores where denom = '" + sector + "'",
@@ -74,9 +74,9 @@ public class ListaCitasRepository {
 					return rs.getString("etiq");							
 					}
 			});
-			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas where Sector= '" + etiq + "'";
+			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from conscitas where Sector= '" + etiq + "'";
 		} else {
-			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from consCitas where laZona= '" + zona + "'";
+			consulta = "select ifnull(Coord,'-') as coord, Sector, laZona from conscitas where laZona= '" + zona + "'";
 		}
 		return jdbcTemplate.query(consulta, 
 				new RowMapper<CitaResponse>() {
