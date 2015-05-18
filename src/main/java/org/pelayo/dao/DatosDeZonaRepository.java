@@ -33,7 +33,7 @@ public class DatosDeZonaRepository {
 					+ sector + "' order by rand() limit 15";
 		} else {
 
-			String idzona = jdbcTemplate.queryForObject("select Id from Zonas where nombre = '" + zona + "'",
+			String idzona = jdbcTemplate.queryForObject("select Id from zonas where nombre = '" + zona + "'",
 					new RowMapper<String>() {
 						@Override
 						public String mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -70,7 +70,7 @@ public class DatosDeZonaRepository {
 		} else if (zona.startsWith("Todo el sector")) {
 			String elsector = zona.substring(zona.indexOf('(') + 1, zona.length() - 1);
 			//String elsector = zona.substring(zona.length() - 1, zona.length());
-			comentario = jdbcTemplate.queryForObject("select Descrip from Sectores where Denom = '" + elsector + "'",
+			comentario = jdbcTemplate.queryForObject("select Descrip from sectores where Denom = '" + elsector + "'",
 					new RowMapper<String>() {
 						@Override
 						public String mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -78,7 +78,7 @@ public class DatosDeZonaRepository {
 						}
 					});
 		} else {
-			comentario = jdbcTemplate.queryForObject("select descripción from Zonas where nombre = '" + zona + "'",
+			comentario = jdbcTemplate.queryForObject("select descripción from zonas where nombre = '" + zona + "'",
 					new RowMapper<String>() {
 						@Override
 						public String mapRow(ResultSet rs, int rowNum) throws SQLException {

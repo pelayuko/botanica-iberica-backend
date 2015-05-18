@@ -64,7 +64,7 @@ public class DatosDeFamiliaRepository {
 
 	public String getRefFlora(String laFamilia) {
 		String flora = jdbcTemplate.queryForObject(
-				"select ifnull(refFloraIberica,'-') as refFlIb from Familias where NombreFam = '" + laFamilia + "'",
+				"select ifnull(refFloraIberica,'-') as refFlIb from familias where NombreFam = '" + laFamilia + "'",
 				new RowMapper<String>() {
 					@Override
 					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -78,7 +78,7 @@ public class DatosDeFamiliaRepository {
 	}
 
 	public String getGrupoFam(String laFamilia) {
-		String grupo = jdbcTemplate.queryForObject("select grupoFam from Familias where NombreFam = '" + laFamilia
+		String grupo = jdbcTemplate.queryForObject("select grupoFam from familias where NombreFam = '" + laFamilia
 				+ "'", new RowMapper<String>() {
 			@Override
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {

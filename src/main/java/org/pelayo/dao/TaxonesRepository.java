@@ -92,7 +92,7 @@ public class TaxonesRepository {
 	}
 
 	public List<SearchResponse> buscaNombreGenero(String busquedaGenero, int limit) {
-		String query = "select NombreGen from Géneros where NombreGen like '" + busquedaGenero
+		String query = "select NombreGen from géneros where NombreGen like '" + busquedaGenero
 				+ "%' and not sinEspecies limit " + limit;
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
@@ -116,7 +116,7 @@ public class TaxonesRepository {
 	}
 
 	public List<SearchResponse> buscaNombreFamilia(String busquedaFamilia, int limit) {
-		String query = "select NombreFam from Familias where NombreFam like '" + busquedaFamilia + "%' limit " + limit;
+		String query = "select NombreFam from familias where NombreFam like '" + busquedaFamilia + "%' limit " + limit;
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {

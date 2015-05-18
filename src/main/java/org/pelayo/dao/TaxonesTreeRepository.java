@@ -21,7 +21,7 @@ public class TaxonesTreeRepository {
 	JdbcTemplate jdbcTemplate;
 
 	public List<TaxonLeaf> taxonLeafsByGroup() {
-		String query = "select NombreGrupo from GruposFam";
+		String query = "select NombreGrupo from gruposfam";
 		return jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -31,7 +31,7 @@ public class TaxonesTreeRepository {
 	}
 
 	public List<TaxonLeaf> taxonLeafsByFamily(String parent) {
-		String query = "select NombreFam, consubfam from Familias where GrupoFam = '" + parent + "'";
+		String query = "select NombreFam, consubfam from familias where GrupoFam = '" + parent + "'";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -43,7 +43,7 @@ public class TaxonesTreeRepository {
 	}
 	
 	public List<TaxonLeaf> taxonLeafsBySubfamily(String parent) {
-		String query = "select SubFamilia from SubFamilias where Familia = '" + parent + "'";
+		String query = "select SubFamilia from subfamilias where Familia = '" + parent + "'";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -55,7 +55,7 @@ public class TaxonesTreeRepository {
 	}
 	
 	public List<TaxonLeaf> taxonLeafsByTribu(String parent) {
-		String query = "select Tribu from Tribus where SubFamilia = '" + parent + "'";
+		String query = "select Tribu from tribus where SubFamilia = '" + parent + "'";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -67,7 +67,7 @@ public class TaxonesTreeRepository {
 	}
 	
 	public List<TaxonLeaf> taxonLeafsByGenus(String parent) {
-		String query = "select NombreGen from Géneros where Tribu = '" + parent + "' and not sinEspecies";
+		String query = "select NombreGen from géneros where Tribu = '" + parent + "' and not sinEspecies";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -75,7 +75,7 @@ public class TaxonesTreeRepository {
 			}
 		});
 		if (result.isEmpty()){
-			query = "select NombreGen from Géneros where Subfamilia = '" + parent + "' and not sinEspecies";
+			query = "select NombreGen from géneros where Subfamilia = '" + parent + "' and not sinEspecies";
 			result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 				@Override
 				public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -83,7 +83,7 @@ public class TaxonesTreeRepository {
 				}
 			});
 			if (result.isEmpty()){
-				query = "select NombreGen from Géneros where Familia = '" + parent + "' and not sinEspecies";
+				query = "select NombreGen from géneros where Familia = '" + parent + "' and not sinEspecies";
 				result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 					@Override
 					public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {

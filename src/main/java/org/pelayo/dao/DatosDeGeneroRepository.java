@@ -60,7 +60,7 @@ public class DatosDeGeneroRepository {
 
 	public String getRefFlora(String elGenero) {
 		String flora = jdbcTemplate.queryForObject(
-				"select ifnull(refFloraIberica,'-') as refFlIb from Géneros where NombreGen = '" + elGenero + "'",
+				"select ifnull(refFloraIberica,'-') as refFlIb from géneros where NombreGen = '" + elGenero + "'",
 				new RowMapper<String>() {
 					@Override
 					public String mapRow(ResultSet rs, int rowNum) throws SQLException {

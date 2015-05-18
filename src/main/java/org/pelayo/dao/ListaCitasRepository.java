@@ -99,7 +99,7 @@ public class ListaCitasRepository {
 	}
 
 	public List<CitaResponse> listaCitasByUtmsSector(String sector) {
-		String consulta = "select UTM, Sector from UtmSectores where (Sector= '" + sector + "' and concita = 1)";
+		String consulta = "select UTM, Sector from utmsectores where (Sector= '" + sector + "' and concita = 1)";
 		return jdbcTemplate.query(consulta,
 				new RowMapper<CitaResponse>() {
 					@Override

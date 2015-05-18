@@ -2,3 +2,4 @@
 target/
 src/main/resources/setup.properties
 src/main/resources/personal.properties
+logs.txt
