@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dserver.port=$PORT -jar target/botanica-backend-0.0.1-SNAPSHOT.war --spring.profiles.active=prod
+web: java $JAVA_OPTS  -DsocksProxyHost=$QUOTAGUARDSTATIC_DOMAIN -DsocksProxyPort=$QUOTAGUARDSTATIC_PORT -Djava.net.socks.username=$QUOTAGUARDSTATIC_USER -Djava.net.socks.password=$QUOTAGUARDSTATIC_PWD -Dserver.port=$PORT -jar target/botanica-backend-0.0.1-SNAPSHOT.war --spring.profiles.active=prod
