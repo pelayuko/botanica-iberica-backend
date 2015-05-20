@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EchoController {
+	
+	@RequestMapping("/")
+	public String hello() {
+		return "hello world";
+	}
 
 	@RequestMapping("/echo")
 	public String echo() throws UnknownHostException, SocketException {
