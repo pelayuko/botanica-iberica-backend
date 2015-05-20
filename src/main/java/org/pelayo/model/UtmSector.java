@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="utmsectores")
+@Table(name="UtmSectores")
 @NamedQuery(name="UtmSector.findAll", query="SELECT u FROM UtmSector u")
 public class UtmSector implements Serializable {
 	private static final long serialVersionUID = 1L;
