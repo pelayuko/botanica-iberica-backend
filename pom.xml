@@ -6,7 +6,6 @@
 	<groupId>org.pelayo</groupId>
 	<artifactId>botanica-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
 
 	<name>botanica-iberica-backend</name>
 	<description>Botanica Ibérica backend</description>
