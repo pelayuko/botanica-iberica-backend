@@ -20,7 +20,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<start-class>org.pelayo.BotanicaBackendApplication</start-class>
 		<java.version>1.7</java.version>
-		<skip.it>true</skip.it>
+		<skip.it>false</skip.it>
 		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
