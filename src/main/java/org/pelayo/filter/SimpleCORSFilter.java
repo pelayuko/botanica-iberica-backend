@@ -21,6 +21,7 @@ public class SimpleCORSFilter implements Filter {
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
+
 		HttpServletResponse test = (HttpServletResponse) res;
 		test.setHeader("Access-Control-Allow-Origin", allowOrigin);
 		test.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");

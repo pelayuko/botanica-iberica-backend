@@ -1,5 +1,6 @@
 package org.pelayo;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -16,8 +17,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 public class BotanicaBackendApplication {
 
+	@Value("${general.Access-Control-Allow-Origin}")
+	private String allowOrigin;
+
 	public static void main(String[] args) {
 		SpringApplication.run(BotanicaBackendApplication.class, args);
 	}
 
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurerAdapter() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins(allowOrigin);
+			}
+		};
+	}
 }
