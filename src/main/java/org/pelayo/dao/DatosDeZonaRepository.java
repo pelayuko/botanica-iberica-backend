@@ -2,7 +2,9 @@ package org.pelayo.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.pelayo.controller.model.FotoResponse;
@@ -42,14 +44,7 @@ public class DatosDeZonaRepository {
 					});
 
 			consulta = "select flickrUrl, ifnull(comentario,'sin coment.') as coment, UTM from consfotoslugares "
-					+ "join sectores on etiq=Sector where Zona = '" + idzona + "'"; // hace
-																					// falta
-																					// el
-																					// sector,
-																					// pero
-																					// no
-																					// se
-																					// restringe
+					+ "join sectores on etiq=Sector where Zona = '" + idzona + "' order by rand() limit 15"; // hace falta el sector, pero no se restringe
 		}
 		List<FotoResponse> results = jdbcTemplate.query(consulta, new RowMapper<FotoResponse>() {
 			@Override
@@ -90,7 +85,7 @@ public class DatosDeZonaRepository {
 		return comentario;
 	}
 
-	public List<FotoResponse> fotosDeZonaAlAzar(int limit) {
+	public List<FotoResponse> fotosDeZonasAlAzar(int limit) {
 		String consulta = "select flickrUrl, Sector, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM, zonas.nombre "
 				+ "from consfotoslugares join zonas on consfotoslugares.zona = zonas.id order by rand() limit " + limit;
 		List<FotoResponse> results = jdbcTemplate.query(consulta, 
@@ -103,5 +98,106 @@ public class DatosDeZonaRepository {
 					}
 				});
 		return results;
+	}
+	
+	public List<FotoResponse> fotosDeZonasPorTema(String tema, int limit) {
+		String consulta = "select flickrUrl, Sector, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM, zonas.nombre "
+				+ "from consfotoslugares join zonas on consfotoslugares.zona = zonas.id where "
+				+ "comentario like '" + tema + "%' or comentario like '% " + tema + "%' or comentario like '%(" + tema + "%' or comentario like '%''" + tema + "%' "
+				+ "order by rand() limit " + limit;
+		List<FotoResponse> results = jdbcTemplate.query(consulta, 
+				new RowMapper<FotoResponse>() {
+					@Override
+					public FotoResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
+						String temp = rs.getString("flickrUrl");
+						return new FotoResponse(temp, rs.getString("coment"), rs.getString("UTM"), "Sector "
+								+ rs.getString("Sector"), rs.getString("zonas.nombre"));
+					}
+				});
+		return results;
+	}
+	
+	public List<String> listaTemas(final String clave, int limit) {
+		Set<String> hs = new HashSet<>();
+		String consulta = "select ifnull(comentario,'sin coment.') as coment from fotoslugares "
+				+ "where comentario like '" + clave + "%' limit " + limit;
+		List<String> results = jdbcTemplate.query(consulta, 
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return limpiaString(rs.getString("coment"), ".");
+					}
+				});
+		hs.addAll(results);
+		
+		results.clear();
+		consulta = "select substring(comentario, locate('("+ clave + "',comentario)) as coment from fotoslugares "
+				+ "where comentario like '%(" + clave +"%' limit " + limit;
+		results = jdbcTemplate.query(consulta, 
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return limpiaString(rs.getString("coment"), "(");
+					}
+				});
+		hs.addAll(results);
+		
+		results.clear();
+		consulta = "select substring(comentario, locate('''"+ clave + "',comentario)) as coment from fotoslugares "
+				+ "where comentario like '%''" + clave +"%' limit " + limit;
+		results = jdbcTemplate.query(consulta, 
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return limpiaString(rs.getString("coment"), "'");
+					}
+				});
+		hs.addAll(results);
+		
+		results.clear();
+		consulta = "select substring(comentario, locate(' "+ clave + "',comentario)) as coment from fotoslugares "
+				+ "where comentario like '% " + clave +"%' limit " + limit;
+		results = jdbcTemplate.query(consulta, 
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return limpiaString(rs.getString("coment"), " ");
+					}
+				});
+		hs.addAll(results);
+		
+		results.clear();
+		
+		results.addAll(hs);
+		return results;
+	}
+	
+	private String limpiaString(String sucia, String inicial) {
+		String limpia = sucia.substring(sucia.indexOf(inicial) + 1, sucia.length());
+		int limit = limpia.indexOf(".");
+		if (limit != -1) limpia = limpia.substring(0, limit);
+		limit = limpia.indexOf(":");
+		if (limit != -1) limpia = limpia.substring(0, limit);
+		limit = limpia.indexOf(",");
+		if (limit != -1) limpia = limpia.substring(0, limit);
+		limit = limpia.indexOf(")");
+		if (limit != -1) limpia = limpia.substring(0, limit);
+		limit = limpia.indexOf("'");
+		if (limit != -1) limpia = limpia.substring(0, limit);
+		limit = limpia.indexOf(" ");
+		if (limit != -1) limpia = limpia.substring(0, limit);
+		return limpia;
+	}
+	
+	public String byUtm(String utm) {
+		String query = "select nombre from fotoslugares join zonas on zonas.id = fotoslugares.zona where Coord = '"
+				+ utm + "' limit 1";
+		String zona = jdbcTemplate.queryForObject(query, new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString("nombre");
+			}
+		});
+		return zona;
 	}
 }

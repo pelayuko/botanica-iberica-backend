@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pelayo.controller.model.SearchResponse;
+import org.pelayo.dao.DatosDeZonaRepository;
 import org.pelayo.dao.TaxonesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,9 @@ public class SearchController {
 
 	@Autowired
 	private TaxonesRepository repo;
+	
+	@Autowired
+	private DatosDeZonaRepository zonaRepo;
 
 	@RequestMapping("/searchAll")
 	public List<SearchResponse> searchAll(@RequestParam(value = "nombre", required = true) String nombre,
@@ -71,6 +75,12 @@ public class SearchController {
 	public List<SearchResponse> buscaNombreZonas(@RequestParam(value = "nombre", required = true) String nombre,
 			@RequestParam(value = "limit", defaultValue = "100") String limit) {
 		return repo.buscaNombreZonas(nombre);
+	}
+	
+	@RequestMapping("/searchTemas")
+	public List<String> buscaTemas(@RequestParam(value = "clave", required = true) String clave,
+			@RequestParam(value = "limit", defaultValue = "100") String limit) {
+		return zonaRepo.listaTemas(clave, Integer.parseInt(limit));
 	}
 
 }

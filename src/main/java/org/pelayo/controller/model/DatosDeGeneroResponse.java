@@ -9,6 +9,10 @@ public class DatosDeGeneroResponse {
 	private String genero;
 
 	private String familia;
+
+	private String subfamilia;
+
+	private String tribu;
 	
 	private String refFloraIberica;
 
@@ -52,6 +56,22 @@ public class DatosDeGeneroResponse {
 
 	public void setRefFloraIberica(String refFloraIberica) {
 		this.refFloraIberica = refFloraIberica;
+	}
+
+	public String getSubfamilia() {
+		return subfamilia;
+	}
+
+	public void setSubfamilia(String subfamilia) {
+		this.subfamilia = subfamilia;
+	}
+
+	public String getTribu() {
+		return tribu;
+	}
+
+	public void setTribu(String tribu) {
+		this.tribu = tribu;
 	}
 
 }

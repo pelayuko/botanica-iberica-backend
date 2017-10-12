@@ -89,11 +89,11 @@ public class SearchResponse {
 
 		switch (type) {
 		case ESPECIE:
+		case FAMILIA:
 		case ESPECIE_COMUN:
 			sb.append(taxon.getAlternombre());
 			break;
 		case GENERO:
-		case FAMILIA:
 		case ZONA:
 			sb.append(result);
 			break;

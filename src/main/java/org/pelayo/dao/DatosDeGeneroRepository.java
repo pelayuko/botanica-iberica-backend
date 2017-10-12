@@ -72,4 +72,28 @@ public class DatosDeGeneroRepository {
 		else
 			return "http://www.floraiberica.es/floraiberica/texto/pdfs/" + flora + ".pdf";
 	}
+	
+	public String getSubfamilia(String elGenero) {
+		String subfamilia = jdbcTemplate.queryForObject(
+				"select ifnull(subfamilia,'-') as subfam from géneros where NombreGen = '" + elGenero + "'",
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getString("subfam");
+					}
+				});
+		return subfamilia;
+	}
+	
+	public String getTribu(String elGenero) {
+		String tribu = jdbcTemplate.queryForObject(
+				"select ifnull(tribu,'-') as trib from géneros where NombreGen = '" + elGenero + "'",
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getString("trib");
+					}
+				});
+		return tribu;
+	}
 }

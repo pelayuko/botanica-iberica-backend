@@ -14,6 +14,10 @@ public class DatosDeFamiliaResponse {
 
 	private List<FotoResponse> fotos;
 
+	private List<String> sinonimos;
+
+	private List<String> subfamilias;
+
 	public List<TaxonResponse> getEspecies() {
 		return especies;
 	}
@@ -52,6 +56,22 @@ public class DatosDeFamiliaResponse {
 
 	public void setRefFloraIberica(String refFloraIberica) {
 		this.refFloraIberica = refFloraIberica;
+	}
+
+	public List<String> getSinonimos() {
+		return sinonimos;
+	}
+
+	public void setSinonimos(List<String> sinonimos) {
+		this.sinonimos = sinonimos;
+	}
+
+	public List<String> getSubfamilias() {
+		return subfamilias;
+	}
+
+	public void setSubfamilias(List<String> subfamilias) {
+		this.subfamilias = subfamilias;
 	}
 
 }

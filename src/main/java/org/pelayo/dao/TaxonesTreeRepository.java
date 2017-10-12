@@ -31,23 +31,28 @@ public class TaxonesTreeRepository {
 	}
 
 	public List<TaxonLeaf> taxonLeafsByFamily(String parent) {
-		String query = "select NombreFam, consubfam from familias where GrupoFam = '" + parent + "'";
+		String query = "select NombreFam, "
+				+ "(select count(*) from subfamilias where subfamilias.familia = nombrefam) as cuenta "
+				+ "from familias where GrupoFam = '" + parent + "'";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
-				boolean flag = rs.getBoolean("consubfam");
-				return new TaxonLeaf(rs.getString("NombreFam"), flag?"subfamily":"genus");
+				int cuenta = rs.getInt("cuenta");
+				return new TaxonLeaf(rs.getString("NombreFam"), (cuenta >0)?"subfamily":"genus");
 			}
 		});
 		return result;
 	}
 	
 	public List<TaxonLeaf> taxonLeafsBySubfamily(String parent) {
-		String query = "select SubFamilia from subfamilias where Familia = '" + parent + "'";
+		String query = "select SubFamilia, "
+				+ "(select count(*) from Tribus where Tribus.subfamilia = subfamilias.subfamilia) as cuenta"
+				+ " from subfamilias where Familia = '" + parent + "'";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonLeaf(rs.getString("SubFamilia"), "tribu");
+				int cuenta = rs.getInt("cuenta");
+				return new TaxonLeaf(rs.getString("SubFamilia"), (cuenta >0)?"tribu":"genus");
 			}
 		});
 		if (result.isEmpty()) result = taxonLeafsByGenus(parent); // no hay subfamilias (ni tribus, por tanto)
@@ -55,7 +60,7 @@ public class TaxonesTreeRepository {
 	}
 	
 	public List<TaxonLeaf> taxonLeafsByTribu(String parent) {
-		String query = "select Tribu from tribus where SubFamilia = '" + parent + "'";
+		String query = "select Tribu from Tribus where Subfamilia = '" + parent + "'";
 		List<TaxonLeaf> result = jdbcTemplate.query(query, new RowMapper<TaxonLeaf>() {
 			@Override
 			public TaxonLeaf mapRow(ResultSet rs, int rowNum) throws SQLException {

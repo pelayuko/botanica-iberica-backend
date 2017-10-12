@@ -110,13 +110,13 @@ public class DatosDeEspecieRepository {
 	}
 
 	public TaxonResponse leeDatosTaxon(final String ident) {
-		String prueba = "select losAutores, Género, Familia from consespecie where elNombre = '" + ident + "'";
+		String prueba = "select losAutores, Género, Familia, idPirineos from consespecie where elNombre = '" + ident + "'";
 		TaxonResponse result = jdbcTemplate.queryForObject(prueba,
 
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(ident, "", rs.getString("Género"), rs.getString("Familia"));
+				return new TaxonResponse(ident, rs.getString("idPirineos"), rs.getString("Género"), rs.getString("Familia"));
 			}
 		});
 		return result;

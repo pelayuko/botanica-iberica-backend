@@ -30,24 +30,6 @@ public class DatosDeFamiliaRepository {
 	@Autowired
 	DatosDeEspecieRepository datosDeEspecieRepository;
 
-	public List<TaxonResponse> getTaxonesByFamilia(String familia) {
-		String query = "select identEsp, Género, elNombre, Familia, fitotipo, fitosubtipo, color from consespecie where Familia = '" + familia + "' order by idPirineos";
-		return jdbcTemplate.query(query,
-
-		new RowMapper<TaxonResponse>() {
-			@Override
-			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				String nombre = rs.getString("elNombre");
-				TaxonResponse elTaxon = new TaxonResponse(nombre, "", rs.getString("Género"), rs.getString("Familia"),
-						datosDeEspecieRepository.getRandomFoto(nombre));
-				elTaxon.setFitotipo(rs.getString("fitotipo"));
-				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
-				elTaxon.setColorflor(rs.getString("color"));
-				return elTaxon;
-			}
-		});
-	}
-
 	public List<FotoResponse> getListFotos(String familia, int limit) {
 		String consulta = "select flickrUrl, elNombre, ifnull(comentario,'sin coment.') as coment, ifnull(UTM,'-') as UTM from consfotos where Familia = '"
 				+ familia + "' order by rand() limit " + limit;
@@ -63,18 +45,23 @@ public class DatosDeFamiliaRepository {
 	}
 
 	public String getRefFlora(String laFamilia) {
-		String flora = jdbcTemplate.queryForObject(
-				"select ifnull(refFloraIberica,'-') as refFlIb from familias where NombreFam = '" + laFamilia + "'",
-				new RowMapper<String>() {
-					@Override
-					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-						return rs.getString("refFlIb");
-					}
-				});
-		if (flora.equals("-"))
+		String query = "select refFloraIberica as refFlIb from familias where NombreFam = '" + laFamilia + "'";
+		log.debug("Get Ref flora - query: " + query);
+
+		List<String> flora = jdbcTemplate.query(query, new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString("refFlIb");
+			}
+		});
+
+		if (flora.isEmpty()) {
+			log.warn("Ref flora is empty for familia: " + laFamilia);
+
 			return "http://www.floraiberica.es";
-		else
-			return "http://www.floraiberica.es/floraiberica/texto/pdfs/" + flora + ".pdf";
+		} else {
+			return "http://www.floraiberica.es/floraiberica/texto/pdfs/" + flora.get(0) + ".pdf";
+		}
 	}
 
 	public String getGrupoFam(String laFamilia) {
@@ -87,4 +74,35 @@ public class DatosDeFamiliaRepository {
 		});
 		return grupo;
 	}
+	
+	public List<String> getListSinonimos(String laFamilia) {
+		String consulta = "select Nombre from denomfamilias where TipoDenom = 'Sinónimo' and NAceptado = '"
+				+ laFamilia + "'"; // Aquí sí irán los autores
+		List<String> results = jdbcTemplate.query(consulta,
+
+		new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString("Nombre");
+			}
+		});
+		return results;
+
+	}
+	
+	public List<String> getListSubfamilias(String laFamilia) {
+		String consulta = "select Subfamilia from subfamilias where Familia = '"
+				+ laFamilia + "'"; // Aquí sí irán los autores
+		List<String> results = jdbcTemplate.query(consulta,
+
+		new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString("Subfamilia");
+			}
+		});
+		return results;
+
+	}
+
 }

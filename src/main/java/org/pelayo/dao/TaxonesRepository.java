@@ -103,40 +103,75 @@ public class TaxonesRepository {
 	}
 
 	public List<TaxonResponse> getTaxonesByGenero(String genero) {
-		String query = "select identEsp,Género,elNombre, Familia from consespecie where Género = '" + genero + "'";
+		String query = "select identEsp,Género,elNombre, Familia, idPirineos from consespecie where Género = '" + genero + "'";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("elNombre"), rs.getString("Género"), rs
+				return new TaxonResponse(rs.getString("elNombre"), rs.getString("idPirineos"), rs.getString("Género"), rs
 						.getString("Familia"));
 			}
 		});
 	}
 
 	public List<SearchResponse> buscaNombreFamilia(String busquedaFamilia, int limit) {
-		String query = "select NombreFam from familias where NombreFam like '" + busquedaFamilia + "%' limit " + limit;
+		String query = "select Nombre, NAceptado from denomfamilias where "
+				+ "TipoDenom in ('Familia','Sinónimo') and "
+				+ "Nombre like '" + busquedaFamilia + "%' limit " + limit;
 		return jdbcTemplate.query(query, new RowMapper<SearchResponse>() {
 			@Override
 			public SearchResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return SearchResponse.mk(SearchType.FAMILIA).withResult(rs.getString("NombreFam"));
+				return SearchResponse.mk(SearchType.FAMILIA).withTaxon(
+						new TaxonResponse(rs.getString("NAceptado"), rs.getString("Nombre")));//withResult(rs.getString("NombreFam"));
 			}
 		});
 	}
 
 	public List<TaxonResponse> getTaxonesByFamilia(String familia) {
-		String query = "select identEsp,Género,elNombre, Familia from consespecie where Familia = '" + familia + "'";
+		String query = "select identEsp, Género, elNombre, Familia, ifnull(subfamilia,'-') as subfam, ifnull(tribu,'-') as trib, "
+				+ " fitotipo, fitosubtipo, color from consespecie where Familia = '"
+				+ familia + "' order by idPirineos";
 		return jdbcTemplate.query(query,
 
 		new RowMapper<TaxonResponse>() {
 			@Override
 			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new TaxonResponse(rs.getString("elNombre"), rs.getString("Género"), rs.getString("Familia"));
+				String nombre = rs.getString("elNombre");
+				TaxonResponse elTaxon = new TaxonResponse(nombre, "", rs.getString("Género"), rs.getString("Familia"),
+						datosDeEspecieRepository.getRandomFoto(nombre));
+				elTaxon.setFitotipo(rs.getString("fitotipo"));
+				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
+				elTaxon.setColorflor(rs.getString("color"));
+				elTaxon.setSubfamilia(rs.getString("subfam"));
+				elTaxon.setTribu(rs.getString("trib"));
+				return elTaxon;
+			}
+		});
+	}
+	public List<TaxonResponse> getGenerosByFamilia(String familia) {
+		String query = "select * from (select identEsp, Género, elNombre, Familia, ifnull(subfamilia,'-') as subfam, ifnull(tribu,'-') as trib, "
+				+ " fitotipo, fitosubtipo, color, idPirineos from consespecie where Familia = '"
+				+ familia + "' order by rand()) as temporal group by Género order by idPirineos";
+		return jdbcTemplate.query(query,
+
+		new RowMapper<TaxonResponse>() {
+			@Override
+			public TaxonResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
+				String nombre = rs.getString("elNombre");
+				TaxonResponse elTaxon = new TaxonResponse(nombre, "", rs.getString("Género"), rs.getString("Familia"),
+						datosDeEspecieRepository.getRandomFoto(nombre));
+				elTaxon.setFitotipo(rs.getString("fitotipo"));
+				elTaxon.setFitosubtipo(rs.getString("fitosubtipo"));
+				elTaxon.setColorflor(rs.getString("color"));
+				elTaxon.setSubfamilia(rs.getString("subfam"));
+				elTaxon.setTribu(rs.getString("trib"));
+				return elTaxon;
 			}
 		});
 	}
 
+	
 	public List<String> getNombreZonasBySector(String etiqsector) {
 		String query = "select nombre from conszonas where Sector = '" + etiqsector + "'";
 		List<String> lista = jdbcTemplate.query(query,

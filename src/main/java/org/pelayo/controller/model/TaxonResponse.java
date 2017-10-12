@@ -9,6 +9,8 @@ public class TaxonResponse {
 	private String genero;
 
 	private String familia;
+	private String subfamilia;
+	private String tribu;
 	private String fitotipo;
 	private String fitosubtipo;
 	private String colorflor;
@@ -97,5 +99,21 @@ public class TaxonResponse {
 
 	public void setColorflor(String colorflor) {
 		this.colorflor = colorflor;
+	}
+
+	public String getSubfamilia() {
+		return subfamilia;
+	}
+
+	public void setSubfamilia(String subfamilia) {
+		this.subfamilia = subfamilia;
+	}
+
+	public String getTribu() {
+		return tribu;
+	}
+
+	public void setTribu(String tribu) {
+		this.tribu = tribu;
 	}
 }

@@ -40,6 +40,7 @@ public class GZIPResponseStream extends ServletOutputStream {
 		if (!open.get()) {
 			throw new IOException("Stream closed!");
 		}
+		
 		gzipStream.write(b, off, len);
 	}
 
@@ -48,6 +49,7 @@ public class GZIPResponseStream extends ServletOutputStream {
 		if (!open.get()) {
 			throw new IOException("Stream closed!");
 		}
+		
 		gzipStream.write(b);
 	}
 

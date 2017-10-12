@@ -8,12 +8,13 @@ public class DatosDeUTMResponse {
 
 	private String elSector;
 
+	private List<String> lasZonas;
+
 	private List<TaxonResponse> especies;
 
 	private List<FotoResponse> fotos;
 
 	private String comentario;
-
 
 	public List<TaxonResponse> getEspecies() {
 		return especies;
@@ -53,6 +54,14 @@ public class DatosDeUTMResponse {
 
 	public void setElSector(String elSector) {
 		this.elSector = elSector;
+	}
+
+	public List<String> getLasZonas() {
+		return lasZonas;
+	}
+
+	public void setLasZonas(List<String> lasZonas) {
+		this.lasZonas = lasZonas;
 	}
 
 

@@ -35,6 +35,10 @@ public class DatosDeGeneroController {
 		
 		resp.setRefFloraIberica(repo.getRefFlora(genus));
 		
+		resp.setSubfamilia(repo.getSubfamilia(genus));
+
+		resp.setTribu(repo.getTribu(genus));
+		
 		return resp;
 	}
 

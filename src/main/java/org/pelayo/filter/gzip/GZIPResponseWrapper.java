@@ -64,7 +64,6 @@ public class GZIPResponseWrapper extends HttpServletResponseWrapper {
 			initGzip();
 			printWriter = new PrintWriter(new OutputStreamWriter(gzipStream, getResponse().getCharacterEncoding()));
 		}
-		System.out.println("GZIPFilter is Working fine!!!!!");
 		return printWriter;
 	}
 

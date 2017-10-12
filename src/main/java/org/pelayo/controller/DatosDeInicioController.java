@@ -8,6 +8,8 @@ import org.pelayo.dao.CitasRepository;
 import org.pelayo.dao.DatosDeEspecieRepository;
 import org.pelayo.dao.DatosDeZonaRepository;
 import org.pelayo.dao.EspecieRepository;
+import org.pelayo.dao.FotosLugaresRepository;
+import org.pelayo.dao.FotosPlantasRepository;
 import org.pelayo.dao.ZonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,13 @@ public class DatosDeInicioController {
 	
 	@Autowired
 	private EspecieRepository especieRepository;
+	
+	@Autowired
+	private FotosPlantasRepository fotosPlantasRepository;
+	
+	@Autowired
+	private FotosLugaresRepository fotosLugaresRepository;
+
 
     @RequestMapping("/datosDeInicioEsp")
     public List<FotoResponse> datosDeInicioEsp(@RequestParam(value = "count", defaultValue = "4") Integer count) {
@@ -45,7 +54,16 @@ public class DatosDeInicioController {
     public List<FotoResponse> datosDeInicioZon(@RequestParam(value = "count", defaultValue = "4") Integer count) {
     	List<FotoResponse> fotos = new ArrayList<FotoResponse>();
     	
-    	fotos.addAll(zonaRepo.fotosDeZonaAlAzar(count));
+    	fotos.addAll(zonaRepo.fotosDeZonasAlAzar(count));
+
+        return fotos;
+    }
+    
+    @RequestMapping("/datosDeInicioTema")
+    public List<FotoResponse> datosDeInicioTema(@RequestParam(value = "tema", defaultValue = "") String tema) {
+    	List<FotoResponse> fotos = new ArrayList<FotoResponse>();
+    	if (tema.length() == 0) fotos.addAll(zonaRepo.fotosDeZonasAlAzar(4));
+    	else fotos.addAll(zonaRepo.fotosDeZonasPorTema(tema, 16));
 
         return fotos;
     }
@@ -54,7 +72,7 @@ public class DatosDeInicioController {
     public List<FotoResponse> fotosPortada(@RequestParam(value = "count", defaultValue = "4") Integer count) {
     	List<FotoResponse> fotos = new ArrayList<FotoResponse>();
     	
-    	fotos.addAll(zonaRepo.fotosDeZonaAlAzar(count/2));
+    	fotos.addAll(zonaRepo.fotosDeZonasAlAzar(count/2));
     	fotos.addAll(especieRepo.fotosDeEspecieAlAzar(count/2));
 
         return fotos;
@@ -73,5 +91,16 @@ public class DatosDeInicioController {
     @RequestMapping("/numeroZonas")
     public Long numeroZonas() {
         return zonaRepository.count();
+    }
+    
+    @RequestMapping("/numeroFotosPlantas")
+    public Long numeroFotosPlantas() {
+        return fotosPlantasRepository.count();
+    }
+    
+    
+    @RequestMapping("/numeroFotosLugares")
+    public Long numeroFotosLugares() {
+        return fotosLugaresRepository.count();
     }
 }
